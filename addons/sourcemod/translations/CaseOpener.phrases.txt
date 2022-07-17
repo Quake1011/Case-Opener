@@ -40,8 +40,8 @@
 
     "prefix"
     {
-        "ru"        "{RED}[QUAKE]{DEFAULT} "
-        "en"        "{RED}[QUAKE]{DEFAULT} "
+        "ru"        "{RED}[CASE]{DEFAULT} "
+        "en"        "{RED}[CASE]{DEFAULT} "
     }
 
 	"credits_scroll"
