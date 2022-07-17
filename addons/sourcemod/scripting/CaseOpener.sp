@@ -106,8 +106,7 @@ public Plugin myinfo = {
 }
 
 public void OnPluginStart() {
-    if(!SQL_CheckConfig("case_opener"))
-    {
+    if(!SQL_CheckConfig("case_opener")) {
         SetFailState("[CASEOPENER] Section \"case_opener\" is not found in databases.cfg");
         return;
     }
