@@ -1,0 +1,105 @@
+"Phrases"
+{
+    "same_level_case"
+    {
+        "ru"        "Вы должны находиться на одной поверхности с кейсом"
+        "en"        "You must be on the same surface as the case"
+    }
+
+    "existing_case"
+    {
+        "ru"        "У вас уже есть существующий кейс"
+        "en"        "You already have an existing case"
+    }
+
+    "received_credits"
+    {
+        "#format"   "{1:i}"
+        "ru"        "Вы получили {GREEN}{1}{DEFAULT} кредитов"
+        "en"        "You got {GREEN}{1}{DEFAULT} credits"
+    }
+
+    "received_exp"
+    {
+        "#format"   "{1:i}"
+        "ru"        "Вы получили {GREEN}{1}{DEFAULT} опыта"
+        "en"        "You got {GREEN}{1}{DEFAULT} experience"
+    }
+
+    "already_has_vip"
+    {
+        "ru"        "Вы уже имеете привилегию"
+        "en"        "You already have an vip"
+    }
+
+    "not_your_case"
+    {
+        "ru"        "Это не ваш кейс!!!"
+        "en"        "This is not your case!!!"
+    }
+
+    "prefix"
+    {
+        "ru"        "{RED}[QUAKE]{DEFAULT} "
+        "en"        "{RED}[QUAKE]{DEFAULT} "
+    }
+
+	"credits_scroll"
+    {
+		"#format"   "{1:s},{2:i}"
+        "ru"        "<span>Кредиты: <font color=\"#{1}\">{2}</font></span>"
+        "en"        "<span>Credits: <font color=\"#{1}\">{2}</font></span>"
+    }
+
+	"exp_scroll"
+    {
+		"#format"   "{1:s},{2:i}"
+        "ru"        "<span>Опыт: <font color=\"#{1}\">{2}</font></span>"
+        "en"        "<span>XP: <font color=\"#{1}\">{2}</font></span>"
+    }
+
+	"vip_scroll"
+    {
+		"#format"   "{1:s},{2:s}"
+        "ru"        "<span>Привилегия: <font color=\"#{1}\">{2}</font></span>"
+        "en"        "<span>Privilege: <font color=\"#{1}\">{2}</font></span>"
+    }
+
+	"not_admin"
+	{
+        "ru"        "У вас нет доступа к этой функции"
+        "en"        "You hasn`t access for this"
+    }
+
+	"too_longer"
+	{
+		"#format"   "{1:i}"
+        "ru"        "Слишком далеко. Минимальное расстояние {GREEN}{1}{DEFAULT} м."
+        "en"        "Too longer. Minimal distance is {GREEN}{1}{DEFAULT} m."
+    }
+
+	"wait_next_case"
+	{
+		"#format"   "{1:i}"
+        "ru"        "Следующий кейс можно открыть через {GREEN}{1}{DEFAULT} секунд"
+        "en"        "The next case can be opened via {GREEN}{1}{DEFAULT} seconds"
+    }
+
+	"be_alive"
+	{
+        "ru"        "Вы должны быть живы, чтобы заспавнить кейс"
+        "en"        "You have to be alive to spawn the case"
+    }
+
+	"freeze_open"
+	{
+        "ru"        "Вы были заморожены до открытия кейса. Подождите %i секунд"
+        "en"        "You`ve been freezed until opening the case. Wait %i seconds"
+    }
+
+	"not_works"
+	{
+        "ru"        "Функция сброса отключена"
+        "en"        "The reset function now is disabled"
+    }
+}
