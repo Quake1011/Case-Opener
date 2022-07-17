@@ -47,7 +47,7 @@ But descs of ConVars inside plugin are will contain Russian lang bcz im is lazy 
 
 ## Directory contents
 - The necessary files for the plugin to work, as well as their .bz2 archives for fastdl
-- The source file CaseOpener_v1_1.sp with additional libraries for compilation and auxiliary files containing paths to sounds and models
+- The source file **CaseOpener_v1_1.sp** with additional libraries for compilation and auxiliary files containing paths to sounds and models
   - **csgo_colors.inc** - [CS:GO Color Library](https://hlmod.ru/threads/inc-cs-go-colors.46870/)
     - **lvl_ranks.inc** - Library of [LEVELS RANKS CORE](https://github.com/levelsranks/levels-ranks-core/tree/3.1.7B2)
       - **shop.inc** - Library of [SHOP CORE](https://github.com/hlmod/Shop-Core)
