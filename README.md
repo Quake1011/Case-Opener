@@ -41,7 +41,7 @@ The plugin has auto-generation of a configuration file as **CaseOpener.cfg** loc
 - **sm_opener_give_exp**  Drop a experience.	**1 - Yes | 0 - No.**
 - **sm_opener_reset_counter**  Allow admins to reset the counter.	**1 - Yes | 0 - No.**
 
-**mark**: For exclusion the VIP-group should to has a prefixes < _ > as first and last symbols. For example `_SUPER_`
+**mark**: For exclusion the VIP-group should to has a prefixes < `_` > as first and last symbols. For example `_SUPER_`
 
 But descs of ConVars inside plugin are will contain Russian lang bcz im is lazy :)
 
