@@ -13,8 +13,8 @@ The plugin supports mysql and sqlite. Before launching the plugin, make sure tha
 }
 ```
 ## Commands 
-Case spawn - **sm_case**
-Reset counter - **sm_reset_counter** (ROOT)
+- Case spawn - **sm_case**
+- Reset counter - **sm_reset_counter** (ROOT)
 ## ConVars
 The plugin has auto-generation of a configuration file as **CaseOpener.cfg** located on the path **cfg/sourcemod/** containing ConVars:
 - **sm_opener_time_give_vip** - Time of VIP in seconds. 0 - forever.	**Default: 604700**
