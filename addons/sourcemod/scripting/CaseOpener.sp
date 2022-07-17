@@ -448,7 +448,7 @@ public Action Command_Case(int client, int args) {
                                 fPosit = SpawnCase(client, fEndOfTrace, fAng);
                                 hFallTimer[client] = CreateTimer(1.4, FallAfterTimer, dp);
                                 dp.WriteCell(client);
-                                dp.WriteFloatArray(fPosit, 3);
+                                dp.WriteFloat(fPosit, 3);
                             }
                         }
                         delete hTrace;
@@ -490,7 +490,7 @@ public Action FallAfterTimer(Handle hTimer, Handle dp) {
     float fPos[3];
     hPack.Reset();
     int client = hPack.ReadCell();
-    hPack.ReadFloatArray(fPos, 3);
+    hPack.ReadFloat(fPos, 3);
     SpawningReward(fPos, client);
     delete hPack;
     return Plugin_Continue;
