@@ -1,7 +1,7 @@
 # A simple version of opening cases
 ***The plugin is a case model spawner that starts a timer before creating an entity simulating a reward. It is a standalone plugin, on the basis of which I am currently writing a private(maybe public) CORE equal to WSGK.***
 
-The plugin supports mysql and sqlite. Before launching the plugin, make sure that the "case_opener" section is present in the **addons/sourcemod/configs/database.cfg** configuration file:
+The plugin supports mysql and sqlite. Before launching the plugin, make sure that the "case_opener" section is exist in the **addons/sourcemod/configs/database.cfg** configuration file:
 ```
 "case_opener"
 {
