@@ -27,7 +27,7 @@
 4) Restart a server
 ## Commands 
 - **sm_case** - Case spawn
-- **sm_reset_counter** - Reset counter for admins(ROOT)
+- **sm_reset_counter** - Reset counter for admins **(ROOT)**
 ## ConVars
 The plugin has auto-generation of a configuration file as **CaseOpener.cfg** located on the path **cfg/sourcemod/** containing ConVars:
 - **sm_opener_time_give_vip** - Time of VIP in seconds. 0 - forever.	**Default: 604700**
