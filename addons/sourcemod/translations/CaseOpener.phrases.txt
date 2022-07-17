@@ -104,8 +104,8 @@
     }
     
         "counter_reseted"
-	{
+    	{
 	"ru"	    "Время успешно обнулено. Кейс доступен для открытия!"
 	"en"	    "The time has been successfully reset. The case is available for opening!"
-	}
+    }
 }
