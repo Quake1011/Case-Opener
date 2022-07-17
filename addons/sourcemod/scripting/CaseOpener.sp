@@ -1,3 +1,5 @@
+#pragma tabsize 4
+
 #include <sourcemod>
 #include <sdkhooks>
 #include <sdktools>
