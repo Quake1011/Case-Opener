@@ -1,8 +1,18 @@
 # A simple version of opening cases
-***The plugin is a case model spawner that starts a timer before creating an entity simulating a reward.***
+***The plugin is a case model spawner that starts a timer before creating an entity simulating a reward. As a reward, you can set VIP groups, a random number of credits and experience.***
 [^1]: It is a standalone plugin, on the basis of which I am currently writing a private(maybe public) CORE equal to WSGK.
 
-The plugin supports mysql and sqlite. Before launching the plugin, make sure that the "case_opener" section is exist in the **addons/sourcemod/configs/database.cfg** configuration file:
+## Requirements
+ - [CSGO Colors](https://hlmod.ru/threads/inc-cs-go-colors.46870/)
+ - [Levels Ranks](https://github.com/levelsranks/levels-ranks-core/tree/3.1.7B2)
+ - [Shop](https://github.com/hlmod/Shop-Core)
+ - [VIP Core](https://github.com/R1KO/VIP-Core/releases)
+ - [SM](https://www.sourcemod.net/downloads.php?branch=stable)
+ - MYSQL | SQLITE
+
+## Setup
+1) Move all files according to the current directories. 
+2) Add **"case_opener"** section in configuration file **addons/sourcemod/configs/database.cfg**:
 ```
 "case_opener"
 {
@@ -13,6 +23,8 @@ The plugin supports mysql and sqlite. Before launching the plugin, make sure tha
   "pass"	"password"
 }
 ```
+3) To configure **CaseOpener.cfg** for yourself
+4) Restart a server
 ## Commands 
 - **sm_case** - Case spawn
 - **sm_reset_counter** - Reset counter for admins(ROOT)
@@ -50,11 +62,12 @@ But descs of ConVars inside plugin are will contain Russian lang bcz im is lazy 
 - The necessary files for the plugin to work, as well as their .bz2 archives for fastdl
 - The source file **CaseOpener.sp** with additional libraries for compilation and auxiliary files containing paths to sounds and models:
   - **csgo_colors.inc** - [CS:GO Color Library](https://hlmod.ru/threads/inc-cs-go-colors.46870/)
-    - **lvl_ranks.inc** - Library of [LEVELS RANKS CORE](https://github.com/levelsranks/levels-ranks-core/tree/3.1.7B2)
-      - **shop.inc** - Library of [SHOP CORE](https://github.com/hlmod/Shop-Core)
-        - **vip_core.inc** - Library of [VIP CORE](https://github.com/R1KO/VIP-Core/releases)
+  - **lvl_ranks.inc** - Library of [LEVELS RANKS CORE](https://github.com/levelsranks/levels-ranks-core/tree/3.1.7B2)
+  - **shop.inc** - Library of [SHOP CORE](https://github.com/hlmod/Shop-Core)
+  - **vip_core.inc** - Library of [VIP CORE](https://github.com/R1KO/VIP-Core/releases)
 - A translation file containing RU and EN langs
 
 ## About possible problems, please let me know: 
 - Quake#2601 - DISCORD
 - [HLMOD](https://hlmod.ru/members/palonez.92448/)
+- [STEAM](https://steamcommunity.com/id/comecamecame/)
