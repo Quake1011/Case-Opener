@@ -29,18 +29,18 @@ The plugin has auto-generation of a configuration file as **CaseOpener.cfg** loc
 - **sm_opener_max_credits** - Maximum number of credits received.	**Default: 2500**
 - **sm_opener_max_position_value** - The maximum distance to case spawn. Depends by sm_opener_max_position.	**Default: 3**
 - **sm_opener_case_kill_time** - The time after which the case will disappear in seconds.	**Default: 3**
-- **sm_opener_same_plat**  Spawn the case on the same plane with the owner.	**1 - Yes | 0 - No.**
-- **sm_opener_kill_case_sound**  Turn on the sound of the case disappearing.	**1 - Yes | 0 - No.**
-- **sm_opener_case_opening_sound**  Enable case opening sounds.	**1 - Yes | 0 - No.**
-- **sm_opener_case_messages**  Enable chat messages.	**1 - Yes | 0 - No.**
-- **sm_opener_case_messages_hint**  Enable messages in the hint.	**1 - Yes | 0 - No.**
-- **sm_opener_case_access**  Access only for admins.	**1 - Yes | 0 - No.**
-- **sm_opener_max_position**  Limit the spawn distance.	**1 - Yes | 0 - No.**
-- **sm_opener_open_output_beam**  Display the maximum spawn radius.	**1 - Yes | 0 - No.**
-- **sm_opener_freeze_open**  Freeze the player while opening the case.	**1 - Yes | 0 - No.**
-- **sm_opener_give_vip**  Drop a VIP group.	**1 - Yes | 0 - No.**
-- **sm_opener_give_exp**  Drop a experience.	**1 - Yes | 0 - No.**
-- **sm_opener_reset_counter**  Allow admins to reset the counter.	**1 - Yes | 0 - No.**
+- **sm_opener_same_plat** - Spawn the case on the same plane with the owner.	**1 - Yes | 0 - No.**
+- **sm_opener_kill_case_sound** - Turn on the sound of the case disappearing.	**1 - Yes | 0 - No.**
+- **sm_opener_case_opening_sound** - Enable case opening sounds.	**1 - Yes | 0 - No.**
+- **sm_opener_case_messages** - Enable chat messages.	**1 - Yes | 0 - No.**
+- **sm_opener_case_messages_hint** - Enable messages in the hint.	**1 - Yes | 0 - No.**
+- **sm_opener_case_access** - Access only for admins.	**1 - Yes | 0 - No.**
+- **sm_opener_max_position** - Limit the spawn distance.	**1 - Yes | 0 - No.**
+- **sm_opener_open_output_beam** - Display the maximum spawn radius.	**1 - Yes | 0 - No.**
+- **sm_opener_freeze_open** - Freeze the player while opening the case.	**1 - Yes | 0 - No.**
+- **sm_opener_give_vip** - Drop a VIP group.	**1 - Yes | 0 - No.**
+- **sm_opener_give_exp** - Drop a experience.	**1 - Yes | 0 - No.**
+- **sm_opener_reset_counter** - Allow admins to reset the counter.	**1 - Yes | 0 - No.**
 
 **mark**: For exclusion the VIP-group should to has a prefixes < `_` > as first and last symbols. For example `_SUPER_`
 
