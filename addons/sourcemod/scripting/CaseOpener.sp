@@ -441,12 +441,10 @@ public Action Command_Case(int client, int args) {
 					}
 				}
 			}
-			delete result;
-			char sQuery[256], auth[22];
 			GetClientAuthId(client, AuthId_Steam2, auth, sizeof(auth));
 			FormatEx(sQuery, sizeof(sQuery), "SELECT * FROM `opener_base` WHERE `steam`='%s' AND `available`='1'", auth);
 			SQL_LockDatabase(gDatabase);
-			DBResultSet result = SQL_Query(gDatabase, sQuery);
+			result = SQL_Query(gDatabase, sQuery);
 			SQL_UnlockDatabase(gDatabase);
 			if(result == INVALID_HANDLE) return Plugin_Stop;
 			if(result.HasResults) {
