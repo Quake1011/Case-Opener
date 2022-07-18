@@ -420,115 +420,115 @@ public Action CommandResetCounter(int client, int args) {
 }
 
 public Action Command_Case(int client, int args) {
-    if(IsPlayerAlive(client)) {
-        //CreateTimer(0.1, CheckAvailableOpen, client, TIMER_FLAG_NO_MAPCHANGE);
-        if(IsClientInGame(i) && !IsFakeClient(i)) {
-            char auth[22], sQuery[256];
-            GetClientAuthId(i, AuthId_Steam2, auth, sizeof(auth));
-            FormatEx(sQuery, sizeof(sQuery), "SELECT * FROM `opener_base` WHERE `steam`='%s'", auth);
-            SQL_LockDatabase(gDatabase);
-            DBResultSet result = SQL_Query(gDatabase, sQuery);
-            SQL_UnlockDatabase(gDatabase);
-            if(result != INVALID_HANDLE) {
-                if(result.HasResults) {
-                    if(result.RowCount > 0) {
-                        int time = GetTime();
-                        result.FetchRow();
-                        if((result.FetchInt(1) + iTimeBeforeNextOpen) <= time) {
-                            FormatEx(sQuery, sizeof(sQuery), "UPDATE `opener_base` SET `available`='1' WHERE `steam`='%s'", auth);
-                            SQL_Query(gDatabase, sQuery);
-                        }
-                    }
-                }
-            }
-            delete result;
-        }
-        char sQuery[256], auth[22];
-        GetClientAuthId(client, AuthId_Steam2, auth, sizeof(auth));
-        FormatEx(sQuery, sizeof(sQuery), "SELECT * FROM `opener_base` WHERE `steam`='%s' AND `available`='1'", auth);
-        SQL_LockDatabase(gDatabase);
-        DBResultSet result = SQL_Query(gDatabase, sQuery);
-        SQL_UnlockDatabase(gDatabase);
-        if(result == INVALID_HANDLE) return Plugin_Stop;
-        if(result.HasResults) {
-            if(result.RowCount > 0) {
-                if(iEntCaseData[client][0] == -1 && iEntCaseData[client][1] == -1 && iEntCaseData[client][2] == -1 && iEntCaseData[client][3] == -1 && iEntCaseData[client][4]) {
-                    if(bCaseAccess) {
-                        AdminId AdminID = GetUserAdmin(client);
-                        if(AdminID == INVALID_ADMIN_ID) {
-                            if(bCaseMessages) CGOPrintToChat(client, "%t%t", "prefix", "not_admin");
+	if(IsClientInGame(client) && !IsFakeClient(client)) {
+		if(IsPlayerAlive(client)) {
+			//CreateTimer(0.1, CheckAvailableOpen, client, TIMER_FLAG_NO_MAPCHANGE);
+			char auth[22], sQuery[256];
+			GetClientAuthId(client, AuthId_Steam2, auth, sizeof(auth));
+			FormatEx(sQuery, sizeof(sQuery), "SELECT * FROM `opener_base` WHERE `steam`='%s'", auth);
+			SQL_LockDatabase(gDatabase);
+			DBResultSet result = SQL_Query(gDatabase, sQuery);
+			SQL_UnlockDatabase(gDatabase);
+			if(result != INVALID_HANDLE) {
+				if(result.HasResults) {
+					if(result.RowCount > 0) {
+						int time = GetTime();
+						result.FetchRow();
+						if((result.FetchInt(1) + iTimeBeforeNextOpen) <= time) {
+							FormatEx(sQuery, sizeof(sQuery), "UPDATE `opener_base` SET `available`='1' WHERE `steam`='%s'", auth);
+							SQL_Query(gDatabase, sQuery);
+						}
+					}
+				}
+			}
+			delete result;
+			char sQuery[256], auth[22];
+			GetClientAuthId(client, AuthId_Steam2, auth, sizeof(auth));
+			FormatEx(sQuery, sizeof(sQuery), "SELECT * FROM `opener_base` WHERE `steam`='%s' AND `available`='1'", auth);
+			SQL_LockDatabase(gDatabase);
+			DBResultSet result = SQL_Query(gDatabase, sQuery);
+			SQL_UnlockDatabase(gDatabase);
+			if(result == INVALID_HANDLE) return Plugin_Stop;
+			if(result.HasResults) {
+				if(result.RowCount > 0) {
+					if(iEntCaseData[client][0] == -1 && iEntCaseData[client][1] == -1 && iEntCaseData[client][2] == -1 && iEntCaseData[client][3] == -1 && iEntCaseData[client][4]) {
+						if(bCaseAccess) {
+							AdminId AdminID = GetUserAdmin(client);
+							if(AdminID == INVALID_ADMIN_ID) {
+								if(bCaseMessages) CGOPrintToChat(client, "%t%t", "prefix", "not_admin");
+								EmitSoundToClient(client, "buttons/blip1.wav", SOUND_FROM_PLAYER, SNDCHAN_AUTO, SNDLEVEL_NORMAL, SND_NOFLAGS, SNDVOL_NORMAL, SNDPITCH_NORMAL, -1, NULL_VECTOR);
+								delete result;
+								return Plugin_Stop;
+							}
+						}
+						if(!IsFakeClient(client)) {
+							float fOrig[3], fAng[3], fEndOfTrace[3];
+							GetClientEyePosition(client, fOrig);
+							GetClientEyeAngles(client, fAng);
+							Handle hTrace = TR_TraceRayFilterEx(fOrig, fAng, CONTENTS_SOLID, RayType_Infinite, TRFilter, client);
+							if(TR_DidHit(hTrace) && hTrace != INVALID_HANDLE) {
+								TR_GetEndPosition(fEndOfTrace, hTrace);
+								float fClientOrigin[3];
+								GetClientAbsOrigin(client, fClientOrigin);
+								if(fEndOfTrace[z] != fClientOrigin[z] && bSamePlat) {
+									if(bCaseMessages) CGOPrintToChat(client, "%t%t", "prefix", "same_level_case");
+								} 
+								else if(GetVectorDistance(fClientOrigin, fEndOfTrace) > float(iMaxPositionValue*100) && bMaxPosition) {
+									if(bCaseMessages) CGOPrintToChat(client, "%t%t", "prefix", "too_longer", iMaxPositionValue);
+									if(bOutputBeam) {
+										float fDist = float(iMaxPositionValue*100);
+										TE_SetupBeamRingPoint(fClientOrigin, 0.0, fDist*2, g_BeamSprite, g_HaloSprite, 0, 660, 1.0, 2.0, 0.0, {255, 255, 0, 255}, 1000, 0);  
+										TE_SendToClient(client);                                      
+									}
+									EmitSoundToClient(client, "buttons/blip1.wav", SOUND_FROM_PLAYER, SNDCHAN_AUTO, SNDLEVEL_NORMAL, SND_NOFLAGS, SNDVOL_NORMAL, SNDPITCH_NORMAL, -1, NULL_VECTOR);
+								}
+								else {
+									DataPack dp = CreateDataPack();
+									float fPosit[3]; 
+									if(bFreezePlayer) {
+										SetEntityMoveType(client, MOVETYPE_NONE);
+										if(bCaseMessages) CGOPrintToChat(client, "%t%t", "prefix", "freeze_open", RoundToFloor(fOpenSpeed));
+									}
+									fPosit = SpawnCase(client, fEndOfTrace, fAng);
+									hFallTimer[client] = CreateTimer(1.4, FallAfterTimer, dp);
+									dp.WriteCell(client);
+									dp.WriteFloat(fPosit[0]);
+									dp.WriteFloat(fPosit[1]);
+									dp.WriteFloat(fPosit[2]);
+								}
+							}
+							delete hTrace;
+						}
+					}
+					else {
+						if(bCaseMessages) CGOPrintToChat(client, "%t%t", "prefix", "existing_case");
+						EmitSoundToClient(client, "buttons/blip1.wav", SOUND_FROM_PLAYER, SNDCHAN_AUTO, SNDLEVEL_NORMAL, SND_NOFLAGS, SNDVOL_NORMAL, SNDPITCH_NORMAL, -1, NULL_VECTOR);
+					}
+				}
+				else if(result.RowCount == 0) {
+					FormatEx(sQuery, sizeof(sQuery), "SELECT * FROM `opener_base` WHERE `steam`='%s'", auth);
+					SQL_LockDatabase(gDatabase);
+					result = SQL_Query(gDatabase, sQuery);
+					SQL_UnlockDatabase(gDatabase);
+					if(result == INVALID_HANDLE) return Plugin_Stop;
+					if(result.HasResults) {
+						if(result.RowCount > 0) {
+							result.FetchRow();
+							int time = (result.FetchInt(1)+iTimeBeforeNextOpen)-GetTime();
+							if(time >= 0) CGOPrintToChat(client, "%t%t", "prefix", "wait_next_case", time);
 							EmitSoundToClient(client, "buttons/blip1.wav", SOUND_FROM_PLAYER, SNDCHAN_AUTO, SNDLEVEL_NORMAL, SND_NOFLAGS, SNDVOL_NORMAL, SNDPITCH_NORMAL, -1, NULL_VECTOR);
-							delete result;
-							return Plugin_Stop;
-                        }
-                    }
-                    if(!IsFakeClient(client)) {
-                        float fOrig[3], fAng[3], fEndOfTrace[3];
-                        GetClientEyePosition(client, fOrig);
-                        GetClientEyeAngles(client, fAng);
-                        Handle hTrace = TR_TraceRayFilterEx(fOrig, fAng, CONTENTS_SOLID, RayType_Infinite, TRFilter, client);
-                        if(TR_DidHit(hTrace) && hTrace != INVALID_HANDLE) {
-                            TR_GetEndPosition(fEndOfTrace, hTrace);
-                            float fClientOrigin[3];
-                            GetClientAbsOrigin(client, fClientOrigin);
-                            if(fEndOfTrace[z] != fClientOrigin[z] && bSamePlat) {
-                                if(bCaseMessages) CGOPrintToChat(client, "%t%t", "prefix", "same_level_case");
-                            } 
-                            else if(GetVectorDistance(fClientOrigin, fEndOfTrace) > float(iMaxPositionValue*100) && bMaxPosition) {
-                                if(bCaseMessages) CGOPrintToChat(client, "%t%t", "prefix", "too_longer", iMaxPositionValue);
-                                if(bOutputBeam) {
-                                    float fDist = float(iMaxPositionValue*100);
-                                    TE_SetupBeamRingPoint(fClientOrigin, 0.0, fDist*2, g_BeamSprite, g_HaloSprite, 0, 660, 1.0, 2.0, 0.0, {255, 255, 0, 255}, 1000, 0);  
-                                    TE_SendToClient(client);                                      
-                                }
-                                EmitSoundToClient(client, "buttons/blip1.wav", SOUND_FROM_PLAYER, SNDCHAN_AUTO, SNDLEVEL_NORMAL, SND_NOFLAGS, SNDVOL_NORMAL, SNDPITCH_NORMAL, -1, NULL_VECTOR);
-                            }
-                            else {
-                                DataPack dp = CreateDataPack();
-                                float fPosit[3]; 
-                                if(bFreezePlayer) {
-                                    SetEntityMoveType(client, MOVETYPE_NONE);
-                                    if(bCaseMessages) CGOPrintToChat(client, "%t%t", "prefix", "freeze_open", RoundToFloor(fOpenSpeed));
-                                }
-                                fPosit = SpawnCase(client, fEndOfTrace, fAng);
-                                hFallTimer[client] = CreateTimer(1.4, FallAfterTimer, dp);
-                                dp.WriteCell(client);
-                                dp.WriteFloat(fPosit[0]);
-                                dp.WriteFloat(fPosit[1]);
-                                dp.WriteFloat(fPosit[2]);
-                            }
-                        }
-                        delete hTrace;
-                    }
-                }
-                else {
-                    if(bCaseMessages) CGOPrintToChat(client, "%t%t", "prefix", "existing_case");
-                    EmitSoundToClient(client, "buttons/blip1.wav", SOUND_FROM_PLAYER, SNDCHAN_AUTO, SNDLEVEL_NORMAL, SND_NOFLAGS, SNDVOL_NORMAL, SNDPITCH_NORMAL, -1, NULL_VECTOR);
-                }
-            }
-            else if(result.RowCount == 0) {
-                FormatEx(sQuery, sizeof(sQuery), "SELECT * FROM `opener_base` WHERE `steam`='%s'", auth);
-                SQL_LockDatabase(gDatabase);
-                result = SQL_Query(gDatabase, sQuery);
-                SQL_UnlockDatabase(gDatabase);
-                if(result == INVALID_HANDLE) return Plugin_Stop;
-                if(result.HasResults) {
-                    if(result.RowCount > 0) {
-                        result.FetchRow();
-                        int time = (result.FetchInt(1)+iTimeBeforeNextOpen)-GetTime();
-                        if(time >= 0) CGOPrintToChat(client, "%t%t", "prefix", "wait_next_case", time);
-                        EmitSoundToClient(client, "buttons/blip1.wav", SOUND_FROM_PLAYER, SNDCHAN_AUTO, SNDLEVEL_NORMAL, SND_NOFLAGS, SNDVOL_NORMAL, SNDPITCH_NORMAL, -1, NULL_VECTOR);
-                        LogMessage("[CASEOPENER] The player %N trying to use !case command but already has active block after opening", client);
-                    }
-                }
-            }
-        } 
-        delete result;
-    }
-    else {
-        if(bCaseMessages) CGOPrintToChat(client, "%t%t", "prefix", "be_alive");
-        EmitSoundToClient(client, "buttons/blip1.wav", SOUND_FROM_PLAYER, SNDCHAN_AUTO, SNDLEVEL_NORMAL, SND_NOFLAGS, SNDVOL_NORMAL, SNDPITCH_NORMAL, -1, NULL_VECTOR);
-    }
+							LogMessage("[CASEOPENER] The player %N trying to use !case command but already has active block after opening", client);
+						}
+					}
+				}
+			} 
+			delete result;
+		}
+		else {
+			if(bCaseMessages) CGOPrintToChat(client, "%t%t", "prefix", "be_alive");
+			EmitSoundToClient(client, "buttons/blip1.wav", SOUND_FROM_PLAYER, SNDCHAN_AUTO, SNDLEVEL_NORMAL, SND_NOFLAGS, SNDVOL_NORMAL, SNDPITCH_NORMAL, -1, NULL_VECTOR);
+		}
+	}
     return Plugin_Continue;
 }
 
