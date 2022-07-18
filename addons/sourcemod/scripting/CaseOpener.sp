@@ -259,30 +259,30 @@ public void SQLTQueryCallBack(Handle owner, Handle hndl, const char[] error, any
     }
 }
 
-public Action CheckAvailableOpen(Handle hTimer, int i) {
-    if(IsClientInGame(i) && !IsFakeClient(i)) {
-        char auth[22], sQuery[256];
-        GetClientAuthId(i, AuthId_Steam2, auth, sizeof(auth));
-        FormatEx(sQuery, sizeof(sQuery), "SELECT * FROM `opener_base` WHERE `steam`='%s'", auth);
-        SQL_LockDatabase(gDatabase);
-        DBResultSet result = SQL_Query(gDatabase, sQuery);
-        SQL_UnlockDatabase(gDatabase);
-        if(result != INVALID_HANDLE) {
-            if(result.HasResults) {
-                if(result.RowCount > 0) {
-                    int time = GetTime();
-                    result.FetchRow();
-                    if((result.FetchInt(1) + iTimeBeforeNextOpen) <= time) {
-                        FormatEx(sQuery, sizeof(sQuery), "UPDATE `opener_base` SET `available`='1' WHERE `steam`='%s'", auth);
-                        SQL_Query(gDatabase, sQuery);
-                    }
-                }
-            }
-        }
-        delete result;
-    }
-    return Plugin_Continue;
-}
+// public Action CheckAvailableOpen(Handle hTimer, int i) {
+//     if(IsClientInGame(i) && !IsFakeClient(i)) {
+//         char auth[22], sQuery[256];
+//         GetClientAuthId(i, AuthId_Steam2, auth, sizeof(auth));
+//         FormatEx(sQuery, sizeof(sQuery), "SELECT * FROM `opener_base` WHERE `steam`='%s'", auth);
+//         SQL_LockDatabase(gDatabase);
+//         DBResultSet result = SQL_Query(gDatabase, sQuery);
+//         SQL_UnlockDatabase(gDatabase);
+//         if(result != INVALID_HANDLE) {
+//             if(result.HasResults) {
+//                 if(result.RowCount > 0) {
+//                     int time = GetTime();
+//                     result.FetchRow();
+//                     if((result.FetchInt(1) + iTimeBeforeNextOpen) <= time) {
+//                         FormatEx(sQuery, sizeof(sQuery), "UPDATE `opener_base` SET `available`='1' WHERE `steam`='%s'", auth);
+//                         SQL_Query(gDatabase, sQuery);
+//                     }
+//                 }
+//             }
+//         }
+//         delete result;
+//     }
+//     return Plugin_Continue;
+// }
 
 public void OnConvarChanged(ConVar convar, const char[] oldValue, const char[] newValue) {
     if(convar != INVALID_HANDLE) {
@@ -420,7 +420,28 @@ public Action CommandResetCounter(int client, int args) {
 
 public Action Command_Case(int client, int args) {
     if(IsPlayerAlive(client)) {
-        CreateTimer(0.1, CheckAvailableOpen, client, TIMER_FLAG_NO_MAPCHANGE);
+        //CreateTimer(0.1, CheckAvailableOpen, client, TIMER_FLAG_NO_MAPCHANGE);
+        if(IsClientInGame(i) && !IsFakeClient(i)) {
+            char auth[22], sQuery[256];
+            GetClientAuthId(i, AuthId_Steam2, auth, sizeof(auth));
+            FormatEx(sQuery, sizeof(sQuery), "SELECT * FROM `opener_base` WHERE `steam`='%s'", auth);
+            SQL_LockDatabase(gDatabase);
+            DBResultSet result = SQL_Query(gDatabase, sQuery);
+            SQL_UnlockDatabase(gDatabase);
+            if(result != INVALID_HANDLE) {
+                if(result.HasResults) {
+                    if(result.RowCount > 0) {
+                        int time = GetTime();
+                        result.FetchRow();
+                        if((result.FetchInt(1) + iTimeBeforeNextOpen) <= time) {
+                            FormatEx(sQuery, sizeof(sQuery), "UPDATE `opener_base` SET `available`='1' WHERE `steam`='%s'", auth);
+                            SQL_Query(gDatabase, sQuery);
+                        }
+                    }
+                }
+            }
+            delete result;
+        }
         char sQuery[256], auth[22];
         GetClientAuthId(client, AuthId_Steam2, auth, sizeof(auth));
         FormatEx(sQuery, sizeof(sQuery), "SELECT * FROM `opener_base` WHERE `steam`='%s' AND `available`='1'", auth);
