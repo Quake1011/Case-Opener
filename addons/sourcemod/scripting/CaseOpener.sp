@@ -406,6 +406,7 @@ public Action CommandResetCounter(int client, int args) {
                 if(result.RowCount > 0) {
                     FormatEx(sQuery, sizeof(sQuery), "UPDATE `opener_base` SET `available`='1', `last_open`='0' WHERE `steam`='%s'", auth);
                     SQL_Query(gDatabase, sQuery);
+		    if(bCaseMessages) CGOPrintToChat(client, "%t%t", "prefix", "counter_reseted");
                 }
             }
         }
