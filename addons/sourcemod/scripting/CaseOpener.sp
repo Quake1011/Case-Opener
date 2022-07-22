@@ -85,7 +85,7 @@ Database gDatabase;
 
 ArrayList hArrayList;
 
-Handle hTimerSpawnRew[MAXPLAYERS+1], hTimerOpenPost[MAXPLAYERS+1], hTimerScrolling[MAXPLAYERS+1], hDelTimer[MAXPLAYERS+1], hFallTimer[MAXPLAYERS+1];
+Handle hTimers[MAXPLAYERS+1][5];
 
 float fOpenSpeed, fOpenSpeedScroll, fOpenSpeedAnim;
 	
@@ -96,8 +96,6 @@ bool bFreezePlayer, bOutputBeam, bSamePlat, bKillCaseSound, bCaseOpeningSound, b
 ConVar g_hFreezePlayer, g_hOutputBeam, g_hOpenSpeedAnim, g_hTimeGiveVip, g_hOpenSpeedScroll, g_hTimeBeforeNextOpen, g_hOpenSpeed, g_hMinCredits, g_hMaxCredits, g_hMinExp, g_hMaxExp, g_hMaxPositionValue, g_hCaseKillTimer, g_hSamePlat, g_hKillCaseSound, g_hCaseOpeningSound, g_hCaseMessages, g_hCaseMessagesHint, g_hCaseAccess, g_hMaxPosition, g_hGiveVIP, g_hGiveExp, g_hResetCounter;
 
 enum {x = 0,y,z};
-
-enum {Credits = 0,Exp,Vip};
 
 public APLRes AskPluginLoad2(Handle myself, bool late, char[] error, int err_max) {
     if(GetEngineVersion() != Engine_CSGO) {
@@ -259,31 +257,6 @@ public void SQLTQueryCallBack(Handle owner, Handle hndl, const char[] error, any
     }
 }
 
-// public Action CheckAvailableOpen(Handle hTimer, int i) {
-//     if(IsClientInGame(i) && !IsFakeClient(i)) {
-//         char auth[22], sQuery[256];
-//         GetClientAuthId(i, AuthId_Steam2, auth, sizeof(auth));
-//         FormatEx(sQuery, sizeof(sQuery), "SELECT * FROM `opener_base` WHERE `steam`='%s'", auth);
-//         SQL_LockDatabase(gDatabase);
-//         DBResultSet result = SQL_Query(gDatabase, sQuery);
-//         SQL_UnlockDatabase(gDatabase);
-//         if(result != INVALID_HANDLE) {
-//             if(result.HasResults) {
-//                 if(result.RowCount > 0) {
-//                     int time = GetTime();
-//                     result.FetchRow();
-//                     if((result.FetchInt(1) + iTimeBeforeNextOpen) <= time) {
-//                         FormatEx(sQuery, sizeof(sQuery), "UPDATE `opener_base` SET `available`='1' WHERE `steam`='%s'", auth);
-//                         SQL_Query(gDatabase, sQuery);
-//                     }
-//                 }
-//             }
-//         }
-//         delete result;
-//     }
-//     return Plugin_Continue;
-// }
-
 public void OnConvarChanged(ConVar convar, const char[] oldValue, const char[] newValue) {
     if(convar != INVALID_HANDLE) {
         if(convar == g_hTimeGiveVip) iTimeGiveVip = convar.IntValue;
@@ -422,7 +395,6 @@ public Action CommandResetCounter(int client, int args) {
 public Action Command_Case(int client, int args) {
 	if(IsClientInGame(client) && !IsFakeClient(client)) {
 		if(IsPlayerAlive(client)) {
-			//CreateTimer(0.1, CheckAvailableOpen, client, TIMER_FLAG_NO_MAPCHANGE);
 			char auth[22], sQuery[256];
 			GetClientAuthId(client, AuthId_Steam2, auth, sizeof(auth));
 			FormatEx(sQuery, sizeof(sQuery), "SELECT * FROM `opener_base` WHERE `steam`='%s'", auth);
@@ -488,7 +460,7 @@ public Action Command_Case(int client, int args) {
 										if(bCaseMessages) CGOPrintToChat(client, "%t%t", "prefix", "freeze_open", RoundToFloor(fOpenSpeed));
 									}
 									fPosit = SpawnCase(client, fEndOfTrace, fAng);
-									hFallTimer[client] = CreateTimer(1.4, FallAfterTimer, dp);
+									hTimers[client][4] = CreateTimer(1.4, FallAfterTimer, dp);
 									dp.WriteCell(client);
 									dp.WriteFloat(fPosit[0]);
 									dp.WriteFloat(fPosit[1]);
@@ -659,9 +631,9 @@ public void SpawningReward(float fPos[3], int client) {
         SetVariantString("!activator");
         AcceptEntityInput(iEntCaseData[client][3], "SetParent", iEntCaseData[client][1]);
 
-        hTimerScrolling[client] = CreateTimer(fOpenSpeedScroll, Scrolling, client, TIMER_REPEAT);
-        hTimerSpawnRew[client] = CreateTimer(fOpenSpeed, SpawnReward, client, TIMER_FLAG_NO_MAPCHANGE);
-        hTimerOpenPost[client] = CreateTimer(fOpenSpeed, SoundOpen, client, TIMER_FLAG_NO_MAPCHANGE);
+        hTimers[client][2] = CreateTimer(fOpenSpeedScroll, Scrolling, client, TIMER_REPEAT);
+        hTimers[client][0] = CreateTimer(fOpenSpeed, SpawnReward, client, TIMER_FLAG_NO_MAPCHANGE);
+        hTimers[client][1] = CreateTimer(fOpenSpeed, SoundOpen, client, TIMER_FLAG_NO_MAPCHANGE);
 	}
 }
 
@@ -686,14 +658,14 @@ public Action Scrolling(Handle hNewTimer, int client) {
 }
 
 public Action SoundOpen(Handle hNewTimer, int client) {
-    if(hTimerScrolling[client] != INVALID_HANDLE) {
-        KillTimer(hTimerScrolling[client]);
-        hTimerScrolling[client] = null;
+    if(hTimers[client][2] != INVALID_HANDLE) {
+        KillTimer(hTimers[client][2]);
+        hTimers[client][2] = null;
     }
 
-    if(hTimerOpenPost[client] != INVALID_HANDLE) {
-        KillTimer(hTimerOpenPost[client]);
-        hTimerOpenPost[client] = null;
+    if(hTimers[client][1] != INVALID_HANDLE) {
+        KillTimer(hTimers[client][1]);
+        hTimers[client][1] = null;
     }
 
     float fPos[3];
@@ -706,18 +678,18 @@ public Action SoundOpen(Handle hNewTimer, int client) {
     if(bCaseOpeningSound) EmitSoundToAll("ui/csgo_ui_crate_display.wav", iEntCaseData[client][0], SNDCHAN_AUTO, SNDLEVEL_NORMAL, SND_NOFLAGS, SNDVOL_NORMAL, SNDPITCH_NORMAL, -1, fPos);
     
     switch(iReward) {
-        case Credits: {
+        case 0: {
             iEntCaseData[client][4] = GetRandomInt(iMinCredits,iMaxCredits);
             if(bCaseMessagesHint) PrintHintText(client, "%t", "credits_scroll", sColor[1], iEntCaseData[client][4]);
         }
-        case Exp: {
+        case 1: {
             iEntCaseData[client][4] = GetRandomInt(iMinExp,iMaxExp);
 			if(bGiveExp) {
 				if(bCaseMessagesHint) PrintHintText(client, "%t", "exp_scroll", sColor[1], iEntCaseData[client][4]);                
             }
 			else if(bCaseMessagesHint) PrintHintText(client, "%t", "credits_scroll", sColor[1], iEntCaseData[client][4]);
         }
-        case Vip: {
+        case 2: {
 			if(bGiveVIP) {
 				iEntCaseData[client][4] = GetRandomInt(0, hArrayList.Length - 1);
 				if(bCaseMessagesHint) {
@@ -740,9 +712,9 @@ public Action SpawnReward(Handle hNewTimer, int client) {
     DispatchSpawn(iEntCaseData[client][1]);
     SDKHook(iEntCaseData[client][1], SDKHook_StartTouch, Hook_GiftStartTouch);
 
-    if(hTimerSpawnRew[client] != INVALID_HANDLE) {
-        KillTimer(hTimerSpawnRew[client]);
-        hTimerSpawnRew[client] = null;
+    if(hTimers[client][0] != INVALID_HANDLE) {
+        KillTimer(hTimers[client][0]);
+        hTimers[client][0] = null;
     }
     return Plugin_Continue;
 }
@@ -758,9 +730,9 @@ public Action OnTouchDelete(Handle hNewTimer, int activator) {
 
     AcceptEntityInput(iEntCaseData[activator][0], "Kill");
 
-    if(hDelTimer[activator] != INVALID_HANDLE) {
-        KillTimer(hDelTimer[activator]);
-        hDelTimer[activator] = null;
+    if(hTimers[activator][3] != INVALID_HANDLE) {
+        KillTimer(hTimers[activator][3]);
+        hTimers[activator][3] = null;
     }
 
     for(int i = 0;i <= 4; i++) {
@@ -772,24 +744,24 @@ public Action OnTouchDelete(Handle hNewTimer, int activator) {
 }
 
 void NullClient(int client) {
-    if(hTimerSpawnRew[client] != INVALID_HANDLE) {
-        KillTimer(hTimerSpawnRew[client]);
-        hTimerSpawnRew[client] = null;
+    if(hTimers[client][0] != INVALID_HANDLE) {
+        KillTimer(hTimers[client][0]);
+        hTimers[client][0] = null;
     }
 
-    if(hTimerOpenPost[client] != INVALID_HANDLE) {
-        KillTimer(hTimerOpenPost[client]);
-        hTimerOpenPost[client] = null;
+    if(hTimers[client][1] != INVALID_HANDLE) {
+        KillTimer(hTimers[client][1]);
+        hTimers[client][1] = null;
     }
 
-    if(hTimerScrolling[client] != INVALID_HANDLE) {
-        KillTimer(hTimerScrolling[client]);
-        hTimerScrolling[client] = null;
+    if(hTimers[client][2] != INVALID_HANDLE) {
+        KillTimer(hTimers[client][2]);
+        hTimers[client][2] = null;
     }
 
-    if(hDelTimer[client] != INVALID_HANDLE) {
-        KillTimer(hDelTimer[client]);
-        hDelTimer[client] = null;
+    if(hTimers[client][3] != INVALID_HANDLE) {
+        KillTimer(hTimers[client][3]);
+        hTimers[client][3] = null;
     }
 
     for(int i = 0;i <= 4; i++) {
@@ -881,7 +853,7 @@ public void Hook_GiftStartTouch(int iEntity, int activator) {
             iEntCaseData[activator][2] = GetEntPropEnt(iEntCaseData[activator][1], Prop_Send, "m_hEffectEntity");
             if(iEntCaseData[activator][2] && IsValidEdict(iEntCaseData[activator][2])) AcceptEntityInput(iEntCaseData[activator][2], "Kill");
             AcceptEntityInput(iEntCaseData[activator][1], "Kill");
-            hDelTimer[activator] = CreateTimer(float(iCaseKillTimer), OnTouchDelete, activator, TIMER_FLAG_NO_MAPCHANGE);
+            hTimers[activator][3] = CreateTimer(float(iCaseKillTimer), OnTouchDelete, activator, TIMER_FLAG_NO_MAPCHANGE);
         }    
     }
 	else if(bCaseMessages) CGOPrintToChat(activator, "%t%t", "prefix", "not_your_case");
