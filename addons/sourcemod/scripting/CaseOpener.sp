@@ -485,7 +485,7 @@ public Action Command_Case(int client, int args) {
 						if(result.RowCount > 0) {
 							result.FetchRow();
 							int time = (result.FetchInt(1)+iTimeBeforeNextOpen)-GetTime();
-							if(time >= 0) CGOPrintToChat(client, "%t%t", "prefix", "wait_next_case", time);
+							if(time >= 0) CGOPrintToChat(client, "%t%t", "prefix", "wait_next_case", time/3600/24, time/3600%24, time/60%60, time%60);
 							EmitSoundToClient(client, "buttons/blip1.wav", SOUND_FROM_PLAYER, SNDCHAN_AUTO, SNDLEVEL_NORMAL, SND_NOFLAGS, SNDVOL_NORMAL, SNDPITCH_NORMAL, -1, NULL_VECTOR);
 							LogMessage("[CASEOPENER] The player %N trying to use !case command but already has active block after opening", client);
 						}
