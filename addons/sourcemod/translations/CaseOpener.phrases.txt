@@ -80,9 +80,9 @@
 
 	"wait_next_case"
 	{
-		"#format"   "{1:i}"
-        "ru"        "Следующий кейс можно открыть через {GREEN}{1}{DEFAULT} секунд"
-        "en"        "The next case can be opened via {GREEN}{1}{DEFAULT} seconds"
+		"#format"   "{1:i},{2:i},{3:i},{4:i}"
+        "ru"        "Следующий кейс можно открыть через {GREEN}{1}{DEFAULT}д. {GREEN}{2}{DEFAULT}ч. {GREEN}{3}{DEFAULT}м. {GREEN}{4}{DEFAULT}с."
+        "en"        "The next case can be opened via {GREEN}{1}{DEFAULT}d. {GREEN}{2}{DEFAULT}h. {GREEN}{3}{DEFAULT}m. {GREEN}{4}{DEFAULT}s."
     }
 
 	"be_alive"
