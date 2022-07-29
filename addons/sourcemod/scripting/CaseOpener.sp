@@ -91,9 +91,11 @@ float fOpenSpeed, fOpenSpeedScroll, fOpenSpeedAnim;
 	
 int iTimeGiveVip, iTimeBeforeNextOpen, iMinCredits, iMaxCredits, iMinExp, iMaxExp, iMaxPositionValue, iCaseKillTimer, iExplode, iReward = -1, iEntCaseData[MAXPLAYERS+1][5], g_HaloSprite, g_BeamSprite;
 
-bool bFreezePlayer, bOutputBeam, bSamePlat, bKillCaseSound, bCaseOpeningSound, bCaseMessages, bCaseMessagesHint, bCaseAccess, bMaxPosition, bGiveExp, bGiveVIP, bResetCounter;
+bool bFreezePlayer, bOutputBeam, bSamePlat, bKillCaseSound, bCaseOpeningSound, bCaseMessages, bCaseMessagesHint, bCaseAccess, bMaxPosition, bGiveExp, bGiveVIP, bResetCounter, bPrintAll, bDropLog;
 
-ConVar g_hFreezePlayer, g_hOutputBeam, g_hOpenSpeedAnim, g_hTimeGiveVip, g_hOpenSpeedScroll, g_hTimeBeforeNextOpen, g_hOpenSpeed, g_hMinCredits, g_hMaxCredits, g_hMinExp, g_hMaxExp, g_hMaxPositionValue, g_hCaseKillTimer, g_hSamePlat, g_hKillCaseSound, g_hCaseOpeningSound, g_hCaseMessages, g_hCaseMessagesHint, g_hCaseAccess, g_hMaxPosition, g_hGiveVIP, g_hGiveExp, g_hResetCounter;
+ConVar g_hFreezePlayer, g_hOutputBeam, g_hOpenSpeedAnim, g_hTimeGiveVip, g_hOpenSpeedScroll, g_hTimeBeforeNextOpen, g_hOpenSpeed, g_hMinCredits, g_hMaxCredits, g_hMinExp, g_hMaxExp, g_hPrintAll, g_hDropLog, g_hMaxPositionValue, g_hCaseKillTimer, g_hSamePlat, g_hKillCaseSound, g_hCaseOpeningSound, g_hCaseMessages, g_hCaseMessagesHint, g_hCaseAccess, g_hMaxPosition, g_hGiveVIP, g_hGiveExp, g_hResetCounter;
+
+static char sLog[PLATFORM_MAX_PATH];
 
 enum {x = 0,y,z};
 
@@ -149,7 +151,13 @@ public void OnPluginStart() {
 
     HookConVarChange((g_hResetCounter =                 CreateConVar("sm_opener_reset_counter","1","Разрешить админам сбрасывать счетчик. 1 - Да, 0 - Нет.",0, true, 0.0, true, 1.0)), OnConvarChanged);
     bResetCounter = g_hResetCounter.BoolValue;
-	
+
+	HookConVarChange((g_hDropLog =                      CreateConVar("sm_opener_log","1","Включить ведение лога выпадения с кейсов. 1 - Да, 0 - Нет.",0, true, 0.0, true, 1.0)), OnConvarChanged);
+    bDropLog = g_hDropLog.BoolValue;
+
+    HookConVarChange((g_hPrintAll =                     CreateConVar("sm_opener_print_all","1","Выводить всем сообщение о выпадении предмета игроку. 1 - Да, 0 - Нет. При включенном sm_opener_case_messages",0, true, 0.0, true, 1.0)), OnConvarChanged);
+    bPrintAll = g_hPrintAll.BoolValue;
+
     HookConVarChange((g_hMinExp =                       CreateConVar("sm_opener_min_exp","400","Минимальное кол-во выдаваемого опыта.",0)), OnConvarChanged);
     iMinExp = g_hMinExp.IntValue;
 
@@ -229,6 +237,11 @@ public void OnPluginStart() {
         } while(kv.GotoNextKey())
     }
     CloseHandle(kv);
+
+	FormatTime(sPath, sizeof(sPath), "%d_%b_%Y", GetTime());
+	BuildPath(Path_SM, sLog, sizeof(sLog), "logs/CaseOpener_%s.txt", sPath);
+	Handle file = OpenFile(sLog, "a+");
+	CloseHandle(file);
 }
 
 public void SQLConnectGlobalDB(Database db, const char[] error, any data) {
@@ -282,6 +295,8 @@ public void OnConvarChanged(ConVar convar, const char[] oldValue, const char[] n
 		else if(convar == g_hGiveVIP) bGiveVIP = convar.BoolValue;
 		else if(convar == g_hGiveExp) bGiveExp = convar.BoolValue;
         else if(convar == g_hResetCounter) bResetCounter = convar.BoolValue;
+        else if(convar == g_hDropLog) bDropLog = convar.BoolValue;
+        else if(convar == g_hPrintAll) bPrintAll = convar.BoolValue;
     }
 }
 
@@ -792,23 +807,49 @@ public void PrintToHintScrolling(client) {
 
 public void Hook_GiftStartTouch(int iEntity, int activator) {
     if(iEntCaseData[activator][1] == iEntity) {
+        char sTime[32];
+        FormatTime(sTime, sizeof(sTime), "%X", GetTime());
         if (activator > 0 && activator <= MaxClients) {
             switch (iReward) {
                 case 0: {
 					Shop_GiveClientCredits(activator, iEntCaseData[activator][4], CREDITS_BY_NATIVE);
-					if(bCaseMessages) CGOPrintToChat(activator, "%t%t", "prefix", "received_credits", iEntCaseData[activator][4]);
+					if(bCaseMessages) 
+                    {
+                        if(bPrintAll) CGOPrintToChatAll("%t%t", "prefix", "received_credits_all", activator, iEntCaseData[activator][4]);
+                        else CGOPrintToChat(activator, "%t%t", "prefix", "received_credits", iEntCaseData[activator][4]);
+                    }
 					LogMessage("[CASEOPENER] The player %N received %i credits", activator, iEntCaseData[activator][4]);
+                    if(bDropLog) 
+                    {
+                        LogToFileEx(sLog, "[ %s ] The player %N got %i credits ", sTime, activator, iEntCaseData[activator][4]);
+                    }
 				}
                 case 1: {
 					if(bGiveExp) {
 						LR_ChangeClientValue(activator, iEntCaseData[activator][4]);
-						if(bCaseMessages) CGOPrintToChat(activator, "%t%t", "prefix", "received_exp", iEntCaseData[activator][4]);
-						LogMessage("[CASEOPENER] The player %N received %i experience", activator, iEntCaseData[activator][4]);					
+						if(bCaseMessages) 
+                        {   
+                            if(bPrintAll) CGOPrintToChatAll("%t%t", "prefix", "received_exp_all", activator, iEntCaseData[activator][4]);
+                            else CGOPrintToChat(activator, "%t%t", "prefix", "received_exp", iEntCaseData[activator][4]);
+                        }
+						LogMessage("[CASEOPENER] The player %N received %i experience", activator, iEntCaseData[activator][4]);
+                        if(bDropLog) 
+                        {
+                            LogToFileEx(sLog, "[ %s ] The player %N got %i experience ", sTime, activator, iEntCaseData[activator][4]);
+                        }
 					}
 					else {
-					    Shop_GiveClientCredits(activator, iEntCaseData[activator][4], CREDITS_BY_NATIVE);
-						if(bCaseMessages) CGOPrintToChat(activator, "%t%t", "prefix", "received_credits", iEntCaseData[activator][4]);
-						LogMessage("[CASEOPENER] The player %N received %i credits", activator, iEntCaseData[activator][4]);
+                        Shop_GiveClientCredits(activator, iEntCaseData[activator][4], CREDITS_BY_NATIVE);
+                        if(bCaseMessages) 
+                        {
+                            if(bPrintAll) CGOPrintToChatAll("%t%t", "prefix", "received_credits_all", activator, iEntCaseData[activator][4]);
+                            else CGOPrintToChat(activator, "%t%t", "prefix", "received_credits", iEntCaseData[activator][4]);
+                        }
+                        LogMessage("[CASEOPENER] The player %N received %i credits", activator, iEntCaseData[activator][4]);
+                        if(bDropLog) 
+                        {
+                            LogToFileEx(sLog, "[ %s ] The player %N got %i credits ", sTime, activator, iEntCaseData[activator][4]);
+                        }
 					}
                 }
                 case 2: {
@@ -817,17 +858,35 @@ public void Hook_GiftStartTouch(int iEntity, int activator) {
 							char buffer[32];
 							hArrayList.GetString(iEntCaseData[activator][4], buffer,sizeof(buffer));
 							VIP_GiveClientVIP(0, activator, iTimeGiveVip, buffer, true);
+                            if(bCaseMessages) 
+                            {
+                                if(bPrintAll) CGOPrintToChatAll("%t%t", "prefix", "got_vip_all", activator, buffer, iTimeGiveVip/3600%24);
+                                else CGOPrintToChat(activator, "%t%t", "prefix", "got_vip");
+                            }
 							LogMessage("[CASEOPENER] The player %N received a privilege: %s", activator, buffer);
+                            if(bDropLog) LogToFileEx(sLog, "[ %s ] The player %N got %s for %i hours ", sTime, activator, buffer, iTimeGiveVip/3600%24);
 						}
 						else {
-							if(bCaseMessages) CGOPrintToChat(activator, "%t%t", "prefix", "already_has_vip");
+							if(bCaseMessages) 
+                            {
+                                if(bPrintAll) CGOPrintToChatAll("%t%t", "prefix", "nothing");
+                                else CGOPrintToChat(activator, "%t%t", "prefix", "already_has_vip");
+                            }
 							LogMessage("[CASEOPENER] The player %N already has vip", activator);
 						}					
 					}
 					else {
-					    Shop_GiveClientCredits(activator, iEntCaseData[activator][4], CREDITS_BY_NATIVE);
-						if(bCaseMessages) CGOPrintToChat(activator, "%t%t", "prefix", "received_credits", iEntCaseData[activator][4]);
-						LogMessage("[CASEOPENER] The player %N received %i credits", activator, iEntCaseData[activator][4]);
+                        Shop_GiveClientCredits(activator, iEntCaseData[activator][4], CREDITS_BY_NATIVE);
+                        if(bCaseMessages) 
+                        {
+                            if(bPrintAll) CGOPrintToChatAll("%t%t", "prefix", "received_credits_all", activator, iEntCaseData[activator][4]);
+                            else CGOPrintToChat(activator, "%t%t", "prefix", "received_credits", iEntCaseData[activator][4]);
+                        }
+                        LogMessage("[CASEOPENER] The player %N received %i credits", activator, iEntCaseData[activator][4]);
+                        if(bDropLog) 
+                        {
+                            LogToFileEx(sLog, "[ %s ] The player %N got %i credits ", sTime, activator, iEntCaseData[activator][4]);
+                        }
 					}
                 }
             }
