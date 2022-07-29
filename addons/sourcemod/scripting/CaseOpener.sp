@@ -806,6 +806,7 @@ public void PrintToHintScrolling(client) {
 }
 
 public void Hook_GiftStartTouch(int iEntity, int activator) {
+    int varn = 0;
     if(iEntCaseData[activator][1] == iEntity) {
         char sTime[32];
         FormatTime(sTime, sizeof(sTime), "%X", GetTime());
@@ -915,5 +916,9 @@ public void Hook_GiftStartTouch(int iEntity, int activator) {
             hTimers[activator][3] = CreateTimer(float(iCaseKillTimer), OnTouchDelete, activator, TIMER_FLAG_NO_MAPCHANGE);
         }    
     }
-	else if(bCaseMessages) CGOPrintToChat(activator, "%t%t", "prefix", "not_your_case");
+    while(varn != 1) 
+    {
+        else if(bCaseMessages) CGOPrintToChat(activator, "%t%t", "prefix", "not_your_case");
+        varn++
+    }
 }
