@@ -93,7 +93,7 @@ float fOpenSpeed, fOpenSpeedScroll, fOpenSpeedAnim;
 	
 int iTimeGiveVip, iTimeBeforeNextOpen, iMinCredits, iMaxCredits, iMinExp, iMaxExp, iMaxPositionValue, iCaseKillTimer, iExplode, iReward = -1, iEntCaseData[MAXPLAYERS+1][5], g_HaloSprite, g_BeamSprite;
 
-bool bFreezePlayer, bOutputBeam, bSamePlat, bKillCaseSound, bCaseOpeningSound, bCaseMessages, bCaseMessagesHint, bCaseAccess, bMaxPosition, bGiveExp, bGiveVIP, bResetCounter, bPrintAll, bDropLog;
+bool bFreezePlayer, bVarn[MAXPLAYERS+1], bOutputBeam, bSamePlat, bKillCaseSound, bCaseOpeningSound, bCaseMessages, bCaseMessagesHint, bCaseAccess, bMaxPosition, bGiveExp, bGiveVIP, bResetCounter, bPrintAll, bDropLog;
 
 ConVar g_hFreezePlayer, g_hOutputBeam, g_hOpenSpeedAnim, g_hTimeGiveVip, g_hOpenSpeedScroll, g_hTimeBeforeNextOpen, g_hOpenSpeed, g_hMinCredits, g_hMaxCredits, g_hMinExp, g_hMaxExp, g_hPrintAll, g_hDropLog, g_hMaxPositionValue, g_hCaseKillTimer, g_hSamePlat, g_hKillCaseSound, g_hCaseOpeningSound, g_hCaseMessages, g_hCaseMessagesHint, g_hCaseAccess, g_hMaxPosition, g_hGiveVIP, g_hGiveExp, g_hResetCounter;
 
@@ -849,6 +849,8 @@ public Action OnTouchDelete(Handle hNewTimer, int activator)
     }
 
     iReward = -1;
+	
+	bVarn[activator] = false;
     return Plugin_Continue;
 }
 
@@ -884,6 +886,8 @@ void NullClient(int client)
     }
 
     iReward = -1;
+	
+	bVarn[client] = false;
 }
 
 public void PrintToHintScrolling(client) 
@@ -910,12 +914,11 @@ public void PrintToHintScrolling(client)
     }
 }
 
-public void Hook_GiftStartTouch(int iEntity, int activator) 
-{        
-	if (activator > 0 && activator <= MaxClients) 
-    {
-		int varn = 0;
-		if(iEntCaseData[activator][1] == iEntity) 
+public Action Hook_GiftStartTouch(int iEntity, int activator) 
+{
+	if(iEntCaseData[activator][1] == iEntity && iEntity > MaxClients) 
+	{
+		if (activator > 0 && activator <= MaxClients) 
 		{
 			char sTime[32];
 			FormatTime(sTime, sizeof(sTime), "%X", GetTime());
@@ -937,14 +940,14 @@ public void Hook_GiftStartTouch(int iEntity, int activator)
 				{
 					if(bGiveExp) 
 					{
-						LR_ChangeClientValue(activator, iEntCaseData[activator][4]);
+                        int value = LR_ChangeClientValue(activator, iEntCaseData[activator][4]);
 						if(bCaseMessages) 
 						{   
-							if(bPrintAll) CGOPrintToChatAll("%t%t", "prefix", "received_exp_all", activator, iEntCaseData[activator][4]);
-							else CGOPrintToChat(activator, "%t%t", "prefix", "received_exp", iEntCaseData[activator][4]);
+							if(bPrintAll) CGOPrintToChatAll("%t%t", "prefix", "received_exp_all", activator, value);
+							else CGOPrintToChat(activator, "%t%t", "prefix", "received_exp", value);
 						}
-						LogMessage("[CASEOPENER] The player %N received %i experience", activator, iEntCaseData[activator][4]);
-						if(bDropLog) LogToFileEx(sLog, "[ %s ] The player %N got %i experience ", sTime, activator, iEntCaseData[activator][4]);
+						LogMessage("[CASEOPENER] The player %N received %i experience", activator, value);
+						if(bDropLog) LogToFileEx(sLog, "[ %s ] The player %N got %i experience ", sTime, activator, value);
 					}
 					else 
 					{
@@ -1026,11 +1029,14 @@ public void Hook_GiftStartTouch(int iEntity, int activator)
 				hTimers[activator][3] = CreateTimer(float(iCaseKillTimer), OnTouchDelete, activator, TIMER_FLAG_NO_MAPCHANGE);
 			}  
 		}
-		while(varn != 1) 
-		
+	}
+	if(bCaseMessages) 
+	{
+		if(!bVarn[activator]) 
 		{
-			if(bCaseMessages) CGOPrintToChat(activator, "%t%t", "prefix", "not_your_case");
-			varn++
+			CGOPrintToChat(activator, "%t%t", "prefix", "not_your_case");
+			bVarn[activator] = true;
 		}
 	}
+    return Plugin_Continue;
 }
