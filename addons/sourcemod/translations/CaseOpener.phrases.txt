@@ -18,6 +18,13 @@
         "ru"        "Вы получили {GREEN}{1}{DEFAULT} кредитов"
         "en"        "You got {GREEN}{1}{DEFAULT} credits"
     }
+	
+	"received_credits_all"
+	{
+		"#format"	"{1:N},{2:i}"
+		"ru"		"Игрок {PURPLE}{1}{DEFAULT} выбил {PURPLE}{2}{DEFAULT} кредитов из кейса, введя !case"
+		"en"		"The player {PURPLE}{1}{DEFAULT} is dropped {PURPLE}{2}{DEFAULT} credits from case by type !case"
+	}
 
     "received_exp"
     {
@@ -25,6 +32,20 @@
         "ru"        "Вы получили {GREEN}{1}{DEFAULT} опыта"
         "en"        "You got {GREEN}{1}{DEFAULT} experience"
     }
+	
+	"received_exp_all"
+	{
+		"#format"	"{1:N},{2:i}"
+		"ru"		"Игрок {PURPLE}{1}{DEFAULT} выбил {PURPLE}{2}{DEFAULT} опыта из кейса, введя !case"
+		"en"		"The player {PURPLE}{1}{DEFAULT} is dropped {PURPLE}{2}{DEFAULT} experience from case by type !case"
+	}
+
+	"got_vip_all"
+	{
+		"#format"	"{1:N},{2:s},{3:i}"
+		"ru"		"Игрок {PURPLE}{1}{DEFAULT} выбил {PURPLE}{2}{DEFAULT} из кейса на {PURPLE}{3}{DEFAULT} часов, введя !case"
+		"en"		"The player {PURPLE}{1}{DEFAULT} is dropped {PURPLE}{2}{DEFAULT} from case for {PURPLE}{3}{DEFAULT} hours by type !case"
+	}
 
     "already_has_vip"
     {
@@ -103,9 +124,9 @@
         "en"        "The reset function now is disabled"
     }
     
-        "counter_reseted"
-    	{
-	"ru"	    "Время успешно обнулено. Кейс доступен для открытия!"
-	"en"	    "The time has been successfully reset. The case is available for opening!"
+    "counter_reseted"
+    {
+		"ru"	    "Время успешно обнулено. Кейс доступен для открытия!"
+		"en"	    "The time has been successfully reset. The case is available for opening!"
     }
 }
