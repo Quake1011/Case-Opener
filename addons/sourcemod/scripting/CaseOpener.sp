@@ -918,7 +918,7 @@ public void Hook_GiftStartTouch(int iEntity, int activator) {
     }
     while(varn != 1) 
     {
-        else if(bCaseMessages) CGOPrintToChat(activator, "%t%t", "prefix", "not_your_case");
+        if(bCaseMessages) CGOPrintToChat(activator, "%t%t", "prefix", "not_your_case");
         varn++
     }
 }
