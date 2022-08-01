@@ -52,11 +52,18 @@
         "ru"        "Вы уже имеете привилегию"
         "en"        "You already have an vip"
     }
-
-    "not_your_case"
+	
+	"not_your_case"
     {
         "ru"        "Это не ваш кейс!!!"
         "en"        "This is not your case!!!"
+    }
+
+    "nothing"
+    {
+		"#format"   "{1:N}"
+        "ru"        "Игрок {PURPLE}{1}{DEFAULT} не получил ничего из кейса :("
+        "en"        "The player {PURPLE}{1}{DEFAULT} received nothing from case :("
     }
 
     "prefix"

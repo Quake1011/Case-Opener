@@ -937,14 +937,14 @@ public Action Hook_GiftStartTouch(int iEntity, int activator)
 				{
 					if(bGiveExp) 
 					{
-                        int value = LR_ChangeClientValue(activator, iEntCaseData[activator][4]);
+                        LR_ChangeClientValue(activator, iEntCaseData[activator][4]);
 						if(bCaseMessages) 
 						{   
-							if(bPrintAll) CGOPrintToChatAll("%t%t", "prefix", "received_exp_all", activator, value);
-							else CGOPrintToChat(activator, "%t%t", "prefix", "received_exp", value);
+							if(bPrintAll) CGOPrintToChatAll("%t%t", "prefix", "received_exp_all", activator, iEntCaseData[activator][4]);
+							else CGOPrintToChat(activator, "%t%t", "prefix", "received_exp", iEntCaseData[activator][4]);
 						}
-						LogMessage("[CASEOPENER] The player %N received %i experience", activator, value);
-						if(bDropLog) LogToFileEx(sLog, "[ %s ] The player %N got %i experience ", sTime, activator, value);
+						LogMessage("[CASEOPENER] The player %N received %i experience", activator, iEntCaseData[activator][4]);
+						if(bDropLog) LogToFileEx(sLog, "[ %s ] The player %N got %i experience ", sTime, activator, iEntCaseData[activator][4]);
 					}
 					else 
 					{
@@ -970,7 +970,6 @@ public Action Hook_GiftStartTouch(int iEntity, int activator)
 							if(bCaseMessages) 
 							{
 								if(bPrintAll) CGOPrintToChatAll("%t%t", "prefix", "got_vip_all", activator, buffer, iTimeGiveVip/3600%24);
-								else CGOPrintToChat(activator, "%t%t", "prefix", "got_vip");
 							}
 							LogMessage("[CASEOPENER] The player %N received a privilege: %s", activator, buffer);
 							if(bDropLog) LogToFileEx(sLog, "[ %s ] The player %N got %s for %i hours ", sTime, activator, buffer, iTimeGiveVip/3600%24);
@@ -979,7 +978,7 @@ public Action Hook_GiftStartTouch(int iEntity, int activator)
 						{
 							if(bCaseMessages) 
 							{
-								if(bPrintAll) CGOPrintToChatAll("%t%t", "prefix", "nothing");
+								if(bPrintAll) CGOPrintToChatAll("%t%t", "prefix", "nothing", activator);
 								else CGOPrintToChat(activator, "%t%t", "prefix", "already_has_vip");
 							}
 							LogMessage("[CASEOPENER] The player %N already has vip", activator);
