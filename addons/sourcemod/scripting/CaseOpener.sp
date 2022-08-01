@@ -1030,7 +1030,7 @@ public Action Hook_GiftStartTouch(int iEntity, int activator)
 			}  
 		}
 	}
-	if(bCaseMessages) 
+	else if(bCaseMessages) 
 	{
 		if(!bVarn[activator]) 
 		{
