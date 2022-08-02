@@ -93,9 +93,9 @@ float fOpenSpeed, fOpenSpeedScroll, fOpenSpeedAnim;
 	
 int iTimeGiveVip, iTimeBeforeNextOpen, iMinCredits, iMaxCredits, iMinExp, iMaxExp, iMaxPositionValue, iCaseKillTimer, iExplode, iReward = -1, iEntCaseData[MAXPLAYERS+1][5], g_HaloSprite, g_BeamSprite;
 
-bool bFreezePlayer, bVarn[MAXPLAYERS+1], bOutputBeam, bSamePlat, bKillCaseSound, bCaseOpeningSound, bCaseMessages, bCaseMessagesHint, bCaseAccess, bMaxPosition, bGiveExp, bGiveVIP, bResetCounter, bPrintAll, bDropLog;
+bool bFreezePlayer, bEnableBoom, bVarn[MAXPLAYERS+1], bOutputBeam, bSamePlat, bKillCaseSound, bCaseOpeningSound, bCaseMessages, bCaseMessagesHint, bCaseAccess, bMaxPosition, bGiveExp, bGiveVIP, bResetCounter, bPrintAll, bDropLog;
 
-ConVar g_hFreezePlayer, g_hOutputBeam, g_hOpenSpeedAnim, g_hTimeGiveVip, g_hOpenSpeedScroll, g_hTimeBeforeNextOpen, g_hOpenSpeed, g_hMinCredits, g_hMaxCredits, g_hMinExp, g_hMaxExp, g_hPrintAll, g_hDropLog, g_hMaxPositionValue, g_hCaseKillTimer, g_hSamePlat, g_hKillCaseSound, g_hCaseOpeningSound, g_hCaseMessages, g_hCaseMessagesHint, g_hCaseAccess, g_hMaxPosition, g_hGiveVIP, g_hGiveExp, g_hResetCounter;
+ConVar g_hFreezePlayer, g_hEnableBoom, g_hOutputBeam, g_hOpenSpeedAnim, g_hTimeGiveVip, g_hOpenSpeedScroll, g_hTimeBeforeNextOpen, g_hOpenSpeed, g_hMinCredits, g_hMaxCredits, g_hMinExp, g_hMaxExp, g_hPrintAll, g_hDropLog, g_hMaxPositionValue, g_hCaseKillTimer, g_hSamePlat, g_hKillCaseSound, g_hCaseOpeningSound, g_hCaseMessages, g_hCaseMessagesHint, g_hCaseAccess, g_hMaxPosition, g_hGiveVIP, g_hGiveExp, g_hResetCounter;
 
 static char sLog[PLATFORM_MAX_PATH];
 
@@ -224,6 +224,9 @@ public void OnPluginStart()
 
     HookConVarChange((g_hMaxPosition =                  CreateConVar("sm_opener_max_position","1","Ограничить расстояние спавна. 1 - Да, 0 - Нет.",0, true, 0.0, true, 1.0)), OnConvarChanged);
     bMaxPosition = g_hMaxPosition.BoolValue;
+	
+    HookConVarChange((g_hEnableBoom =                  CreateConVar("sm_opener_no_boom","1","Отключить взрыв при удалении кейса. 1 - Да, 0 - Нет.",0, true, 0.0, true, 1.0)), OnConvarChanged);
+    bEnableBoom = g_hEnableBoom.BoolValue;
 
     AutoExecConfig(true, "CaseOpener");
 
@@ -250,10 +253,13 @@ public void OnPluginStart()
     }
     CloseHandle(kv);
 
-	FormatTime(sPath, sizeof(sPath), "%d_%b_%Y", GetTime());
-	BuildPath(Path_SM, sLog, sizeof(sLog), "logs/CaseOpener_%s.txt", sPath);
-	Handle file = OpenFile(sLog, "a+");
-	CloseHandle(file);
+	if(bDropLog)
+	{
+		FormatTime(sPath, sizeof(sPath), "%d_%b_%Y", GetTime());
+		BuildPath(Path_SM, sLog, sizeof(sLog), "logs/CaseOpener_%s.txt", sPath);
+		Handle file = OpenFile(sLog, "a+");
+		CloseHandle(file);
+	}
 }
 
 public void SQLConnectGlobalDB(Database db, const char[] error, any data) 
@@ -316,6 +322,7 @@ public void OnConvarChanged(ConVar convar, const char[] oldValue, const char[] n
         else if(convar == g_hResetCounter) bResetCounter = convar.BoolValue;
         else if(convar == g_hDropLog) bDropLog = convar.BoolValue;
         else if(convar == g_hPrintAll) bPrintAll = convar.BoolValue;
+		else if(convar == g_hEnableBoom) bEnableBoom = convar.BoolValue;
     }
 }
 
@@ -773,12 +780,20 @@ public Action SoundOpen(Handle hNewTimer, int client)
     {
         case 0: 
         {
-            iEntCaseData[client][4] = GetRandomInt(iMinCredits,iMaxCredits);
+			while(iEntCaseData[client][4] == -1)
+			{
+				iEntCaseData[client][4] = GetRandomInt(iMinCredits,iMaxCredits);
+			}
+			
             if(bCaseMessagesHint) PrintHintText(client, "%t", "credits_scroll", sColor[1], iEntCaseData[client][4]);
         }
         case 1: 
         {
-            iEntCaseData[client][4] = GetRandomInt(iMinExp,iMaxExp);
+			while(iEntCaseData[client][4] == -1)
+			{
+				iEntCaseData[client][4] = GetRandomInt(iMinExp,iMaxExp);
+			}
+			
 			if(bGiveExp) 
             {
 				if(bCaseMessagesHint) PrintHintText(client, "%t", "exp_scroll", sColor[1], iEntCaseData[client][4]);                
@@ -823,14 +838,18 @@ public Action SpawnReward(Handle hNewTimer, int client)
 
 public Action OnTouchDelete(Handle hNewTimer, int activator) 
 {
-    if(bKillCaseSound) 
+	float fPos[3];
+    if(bKillCaseSound)
     {
-        float fPos[3];
         GetEntPropVector(iEntCaseData[activator][0], Prop_Data, "m_vecAbsOrigin", fPos);
         EmitSoundToAll("weapons/hegrenade/explode3.wav", iEntCaseData[activator][0], SNDCHAN_AUTO, SNDLEVEL_NORMAL, SND_NOFLAGS, SNDVOL_NORMAL, SNDPITCH_NORMAL, -1, fPos);
+	}	
+	
+	if(bEnableBoom)
+	{
         TE_SetupExplosion(fPos, iExplode, 10.0, 1, 0, 275, 160);
-        TE_SendToAll();
-    }
+        TE_SendToAll();	
+	}
 
     AcceptEntityInput(iEntCaseData[activator][0], "Kill");
 
