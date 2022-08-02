@@ -53,6 +53,10 @@ The plugin has auto-generation of a configuration file as **CaseOpener.cfg** loc
 - **sm_opener_give_vip** - Drop a VIP group.	**1 - Yes | 0 - No.**
 - **sm_opener_give_exp** - Drop a experience.	**1 - Yes | 0 - No.**
 - **sm_opener_reset_counter** - Allow admins to reset the counter.	**1 - Yes | 0 - No.**
+- **sm_opener_log** - Enable logging case drops.	**1 - Yes | 0 - No.**
+- **sm_opener_print_all** - Print for all when player items drops.	**1 - Yes | 0 - No.**
+- **sm_opener_log** - Enable logging case drops.	**1 - Yes | 0 - No.**
+- **sm_opener_log** - Enable logging case drops.	**1 - Yes | 0 - No.**
 
 **mark**: For to include the VIP-group should to has a prefixes < `_` > as first and last symbols. For example `_SUPER_`
 
