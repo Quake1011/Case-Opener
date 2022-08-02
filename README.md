@@ -57,7 +57,7 @@ The plugin has auto-generation of a configuration file as **CaseOpener.cfg** loc
 - **sm_opener_print_all** - Print for all when player items drops.	**1 - Yes | 0 - No.**
 
 **mark**: For to include the VIP-group should to has a prefixes < `_` > as first and last symbols. For example `_SUPER_`
-
+**warn**: If you are having lags by types a command !case - set the plugin on SQLite connection
 But descs of ConVars inside plugin are will contain Russian lang bcz im is lazy :)
 
 ## Directory contents
