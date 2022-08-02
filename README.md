@@ -7,7 +7,7 @@
  - [Levels Ranks](https://github.com/levelsranks/levels-ranks-core/tree/3.1.7B2)
  - [Shop](https://github.com/hlmod/Shop-Core)
  - [VIP Core](https://github.com/R1KO/VIP-Core/releases)
- - [SM 1.11](https://www.sourcemod.net/downloads.php?branch=stable)
+ - [SM 1.10]
  - MYSQL | SQLITE
 
 ## Setup
