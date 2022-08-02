@@ -70,7 +70,7 @@ But descs of ConVars inside plugin are will contain Russian lang bcz im is lazy 
 - A translation file containing RU and EN langs
 
 ## IMPORTANT 
-- If you are having lags by types a command !case - set the plugin on SQLite connection
+- If you are having lags by types a command !case - set the plugin on SQLite connection or change MYSQL server
 
 ## About possible problems, please let me know: 
 - Quake#2601 - DISCORD
