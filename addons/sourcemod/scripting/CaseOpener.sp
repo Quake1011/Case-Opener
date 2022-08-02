@@ -839,9 +839,9 @@ public Action SpawnReward(Handle hNewTimer, int client)
 public Action OnTouchDelete(Handle hNewTimer, int activator) 
 {
 	float fPos[3];
+	GetEntPropVector(iEntCaseData[activator][0], Prop_Data, "m_vecAbsOrigin", fPos);
     if(bKillCaseSound)
     {
-        GetEntPropVector(iEntCaseData[activator][0], Prop_Data, "m_vecAbsOrigin", fPos);
         EmitSoundToAll("weapons/hegrenade/explode3.wav", iEntCaseData[activator][0], SNDCHAN_AUTO, SNDLEVEL_NORMAL, SND_NOFLAGS, SNDVOL_NORMAL, SNDPITCH_NORMAL, -1, fPos);
 	}	
 	
