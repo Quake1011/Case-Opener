@@ -4,10 +4,11 @@
 
 ## Requirements
  - [CSGO Colors](https://hlmod.ru/threads/inc-cs-go-colors.46870/)
- - [Levels Ranks](https://github.com/levelsranks/levels-ranks-core/tree/3.1.7B2)
+ - [Levels Ranks](https://github.com/levelsranks/levels-ranks-core/tree/3.1.7B2) (optional)
  - [Shop](https://github.com/hlmod/Shop-Core)
- - [VIP Core](https://github.com/R1KO/VIP-Core/releases)
- - [SM 1.10]
+ - [VIP Core](https://github.com/R1KO/VIP-Core/releases) (optional)
+ - [FPS](https://github.com/OkyHp/Fire-Players-Stats) (optional)
+ - >= SM 1.10
  - MYSQL | SQLITE
 
 ## Setup
@@ -28,6 +29,7 @@
 ## Commands 
 - **sm_case** - Case spawn
 - **sm_reset_counter** - Reset counter for admins **(ROOT)**
+- **sm_reset_for** - Select the player for reset counter **(ROOT)**
 ## ConVars
 The plugin has auto-generation of a configuration file as **CaseOpener.cfg** located on the path **cfg/sourcemod/** containing ConVars:
 - **sm_opener_time_give_vip** - Time of VIP in seconds. 0 - forever.	**Default: 604700**
@@ -49,28 +51,21 @@ The plugin has auto-generation of a configuration file as **CaseOpener.cfg** loc
 - **sm_opener_case_access** - Access only for admins.	**1 - Yes | 0 - No.**
 - **sm_opener_max_position** - Limit the spawn distance.	**1 - Yes | 0 - No.**
 - **sm_opener_open_output_beam** - Display the maximum spawn radius.	**1 - Yes | 0 - No.**
-- **sm_opener_freeze_open** - Freeze the player while opening the case.	**1 - Yes | 0 - No.**
 - **sm_opener_give_vip** - Drop a VIP group.	**1 - Yes | 0 - No.**
 - **sm_opener_give_exp** - Drop a experience.	**1 - Yes | 0 - No.**
 - **sm_opener_reset_counter** - Allow admins to reset the counter.	**1 - Yes | 0 - No.**
 - **sm_opener_log** - Enable logging case drops.	**1 - Yes | 0 - No.**
 - **sm_opener_print_all** - Print for all when player items drops.	**1 - Yes | 0 - No.**
+- **sm_opener_no_boom** - Disable the explosion when removing the case.	**1 - Yes | 0 - No.**
+- **sm_opener_start_counter** - To start counter.	**1 - after touch | 0 - after open.**
 
 **mark**: For to include the VIP-group should to has a prefixes < `_` > as first and last symbols. For example `_SUPER_`
 
-But descs of ConVars inside plugin are will contain Russian lang bcz im is lazy :)
-
-## Directory contents
-- The necessary files for the plugin to work, as well as their .bz2 archives for fastdl
-- The source file **CaseOpener.sp** with additional libraries for compilation:
-  - **csgo_colors.inc** - [CS:GO Color Library](https://hlmod.ru/threads/inc-cs-go-colors.46870/)
-  - **lvl_ranks.inc** - Library of [LEVELS RANKS CORE](https://github.com/levelsranks/levels-ranks-core/tree/3.1.7B2)
-  - **shop.inc** - Library of [SHOP CORE](https://github.com/hlmod/Shop-Core)
-  - **vip_core.inc** - Library of [VIP CORE](https://github.com/R1KO/VIP-Core/releases)
-- A translation file containing RU and EN langs
-
 ## IMPORTANT 
 - If you are having lags by types a command !case - set the plugin on SQLite connection or change MYSQL server
+
+## Thanks
+- [<ScriptKiddie>](https://hlmod.ru/members/scriptkiddie.152745/) (tests & ideas)
 
 ## About possible problems, please let me know: 
 - Quake#2601 - DISCORD
