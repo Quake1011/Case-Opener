@@ -24,7 +24,7 @@
   "pass"	"password"
 }
 ```
-3) To configure **CaseOpener.cfg** for yourself
+3) To configure **CaseOpener.cfg** for yourself in the source code before compilation or after file generation
 4) Depends by the statistics plugin on the server - delete the **lvl_ranks.inc** or **FirePlayersStats.inc** library from the **addons/sourcemod/scripting/include** folder. If dont use these plugins for statistics you should delete both libraries
 5) Compile **Case Opener.sp** and move it to the **plugins** folder
 6) Restart a server
