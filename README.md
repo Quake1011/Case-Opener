@@ -65,7 +65,7 @@ The plugin has auto-generation of a configuration file as **CaseOpener.cfg** loc
 - If you are having lags by types a command !case - set the plugin on SQLite connection or change MYSQL server
 
 ## Thanks
-- [<ScriptKiddie>](https://hlmod.ru/members/scriptkiddie.152745/) (tests & ideas)
+- [ScriptKiddie](https://hlmod.ru/members/scriptkiddie.152745/) (tests & ideas)
 
 ## About possible problems, please let me know: 
 - Quake#2601 - DISCORD
