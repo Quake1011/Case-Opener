@@ -8,7 +8,7 @@
  - [Shop](https://github.com/hlmod/Shop-Core)
  - [VIP Core](https://github.com/R1KO/VIP-Core/releases) (optional)
  - [FPS](https://github.com/OkyHp/Fire-Players-Stats) (optional)
- - >= SM 1.10
+ - *>=* SM 1.10
  - MYSQL | SQLITE
 
 ## Setup
