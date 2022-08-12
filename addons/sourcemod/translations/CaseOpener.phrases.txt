@@ -75,22 +75,22 @@
 	"credits_scroll"
     {
 		"#format"   "{1:s},{2:i}"
-        "ru"        "<span>Кредиты: <font color=\"#{1}\">{2}</font></span>"
-        "en"        "<span>Credits: <font color=\"#{1}\">{2}</font></span>"
+        "ru"        "<pre><center>Кредиты: <font color=\"#{1}\">{2}</font></center></pre>"
+        "en"        "<pre><center>Credits: <font color=\"#{1}\">{2}</font></center></pre>"
     }
 
 	"exp_scroll"
     {
 		"#format"   "{1:s},{2:i}"
-        "ru"        "<span>Опыт: <font color=\"#{1}\">{2}</font></span>"
-        "en"        "<span>XP: <font color=\"#{1}\">{2}</font></span>"
+        "ru"        "<pre><center>Опыт: <font color=\"#{1}\">{2}</font></center></pre>"
+        "en"        "<pre><center>XP: <font color=\"#{1}\">{2}</font></center></pre>"
     }
 
 	"vip_scroll"
     {
 		"#format"   "{1:s},{2:s}"
-        "ru"        "<span>Привилегия: <font color=\"#{1}\">{2}</font></span>"
-        "en"        "<span>Privilege: <font color=\"#{1}\">{2}</font></span>"
+        "ru"        "<pre><center>Привилегия: <font color=\"#{1}\">{2}</font></center></pre>"
+        "en"        "<pre><center>Privilege: <font color=\"#{1}\">{2}</font></center></pre>"
     }
 
 	"not_admin"
