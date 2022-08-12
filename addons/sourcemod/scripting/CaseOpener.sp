@@ -844,12 +844,9 @@ float[] SpawnCase(int iClient, float fPos[3], float fAng[3])
 public void SpawningReward(float fPos[3], int client) 
 {
     SetVariantString("open");
-    if(iEntCaseData[client][0] != -1) 
-    {
-	    AcceptEntityInput(iEntCaseData[client][0], "SetAnimation", -1, -1, -1);
-	    AcceptEntityInput(iEntCaseData[client][0], "EnableCollision");
-	    DispatchKeyValueFloat(iEntCaseData[client][0], "playbackrate", fOpenSpeedAnim);
-    }
+	AcceptEntityInput(iEntCaseData[client][0], "SetAnimation", -1, -1, -1);
+	AcceptEntityInput(iEntCaseData[client][0], "EnableCollision");
+	DispatchKeyValueFloat(iEntCaseData[client][0], "playbackrate", fOpenSpeedAnim);
 #if ((defined _levelsranks_included_ || defined _fire_players_stats_included) && defined _vip_core_included)
     int iRandom = GetRandomInt(1,99);
     if(iRandom >= 1  && iRandom <= 33) iReward[client] = 0;
@@ -1146,6 +1143,12 @@ void NullClient(int client)
     {
         KillTimer(hTimers[client][3]);
         hTimers[client][3] = null;
+    }
+	
+	if(hTimers[client][4] != INVALID_HANDLE) 
+    {
+        KillTimer(hTimers[client][4]);
+        hTimers[client][4] = null;
     }
 
     for(int i = 0;i <= 4; i++) 
