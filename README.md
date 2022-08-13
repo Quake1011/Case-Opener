@@ -64,7 +64,7 @@ The plugin has auto-generation of a configuration file as **CaseOpener.cfg** loc
 **mark**: For to include the VIP-group should to has a prefixes < `_` > as first and last symbols. For example `_SUPER_`
 
 ## IMPORTANT 
-- If you are having lags by types a command !case - set the plugin on SQLite connection or change MYSQL server
+- If you are has lags by types a command !case - set the plugin on SQLite connection or change MYSQL server
 
 ## Thanks
 - [ScriptKiddie](https://hlmod.ru/members/scriptkiddie.152745/) (tests & ideas)
