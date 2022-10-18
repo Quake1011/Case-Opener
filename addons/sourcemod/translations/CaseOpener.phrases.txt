@@ -68,8 +68,8 @@
 
     "prefix"
     {
-        "ru"        "{LIGNTRED}[Кейс]{DEFAULT} "
-        "en"        "{LIGNTRED}[Кейс]{DEFAULT} "
+        "ru"        "{LIGNTRED}[CASE]{DEFAULT} "
+        "en"        "{LIGNTRED}[CASE]{DEFAULT} "
     }
 
 	"credits_scroll"
@@ -109,20 +109,14 @@
 	"wait_next_case"
 	{
 		"#format"   "{1:i},{2:i},{3:i},{4:i}"
-        "ru"        "Кейс будет доступен через {GREEN}{2}{DEFAULT}ч. {GREEN}{3}{DEFAULT}м. {GREEN}{4}{DEFAULT}с."
-        "en"        "The next case can be opened via {GREEN}{2}{DEFAULT}h. {GREEN}{3}{DEFAULT}m. {GREEN}{4}{DEFAULT}s."
+        "ru"        "Следующий кейс можно открыть через {GREEN}{1}{DEFAULT}д. {GREEN}{2}{DEFAULT}ч. {GREEN}{3}{DEFAULT}м. {GREEN}{4}{DEFAULT}с."
+        "en"        "The next case can be opened via {GREEN}{1}{DEFAULT}d. {GREEN}{2}{DEFAULT}h. {GREEN}{3}{DEFAULT}m. {GREEN}{4}{DEFAULT}s."
     }
 
 	"be_alive"
 	{
         "ru"        "Вы должны быть живы, чтобы заспавнить кейс"
         "en"        "You have to be alive to spawn the case"
-    }
-
-	"freeze_open"
-	{
-        "ru"        "Вы были заморожены до открытия кейса. Подождите %i секунд"
-        "en"        "You`ve been freezed until opening the case. Wait %i seconds"
     }
 
 	"not_works"
