@@ -25,13 +25,12 @@
 }
 ```
 3) To configure **CaseOpener.cfg** for yourself in the source code before compilation or after file generation
-4) Depends by the statistics plugin on the server - delete the **lvl_ranks.inc** or **FirePlayersStats.inc** library from the **addons/sourcemod/scripting/include** folder. If dont use these plugins for statistics you should delete both libraries
-5) Compile **Case Opener.sp** and move it to the **plugins** folder
-6) Restart a server
+4) To configure **Opener.ini** if you need 
+5) Depends by the statistics plugin on the server - delete the **lvl_ranks.inc** or **FirePlayersStats.inc** library from the **addons/sourcemod/scripting/include** folder. If dont use these plugins for statistics you should delete both libraries
+6) Compile **Case Opener.sp** and move it to the **plugins** folder.
+7) Restart a server
 ## Commands 
-- **sm_case** - Case spawn
-- **sm_reset_counter** - Reset counter for admins **(ROOT)**
-- **sm_reset_for** - Select the player for reset counter **(ROOT)**
+- Setts in **Opener.ini**
 ## ConVars
 The plugin has auto-generation of a configuration file as **CaseOpener.cfg** located on the path **cfg/sourcemod/** containing ConVars:
 - **sm_opener_time_give_vip** - Time of VIP in seconds. 0 - forever.	**Default: 604700**
@@ -61,7 +60,7 @@ The plugin has auto-generation of a configuration file as **CaseOpener.cfg** loc
 - **sm_opener_no_boom** - Disable the explosion when removing the case.	**1 - Yes | 0 - No.**
 - **sm_opener_start_counter** - To start counter.	**1 - after touch | 0 - after open.**
 
-**mark**: For to include the VIP-group should to has a prefixes < `_` > as first and last symbols. For example `_SUPER_`
+**mark**: To drop out the necessary VIP groups - configure the Opener.ini with the specifying of the desired groups and chances
 
 ## IMPORTANT 
 - If you are has lags by types a command !case - set the plugin on SQLite connection or change MYSQL server

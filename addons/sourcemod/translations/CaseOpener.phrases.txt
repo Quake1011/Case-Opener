@@ -62,14 +62,14 @@
     "nothing"
     {
 		"#format"   "{1:N}"
-        "ru"        "Игрок {PURPLE}{1}{DEFAULT} не получил ничего из кейса :("
+        "ru"        "Игроку {PURPLE}{1}{DEFAULT} ничего не выпало из кейса :("
         "en"        "The player {PURPLE}{1}{DEFAULT} received nothing from case :("
     }
 
     "prefix"
     {
-        "ru"        "{RED}[CASE]{DEFAULT} "
-        "en"        "{RED}[CASE]{DEFAULT} "
+        "ru"        "{LIGNTRED}[Кейс]{DEFAULT} "
+        "en"        "{LIGNTRED}[Кейс]{DEFAULT} "
     }
 
 	"credits_scroll"
@@ -109,8 +109,8 @@
 	"wait_next_case"
 	{
 		"#format"   "{1:i},{2:i},{3:i},{4:i}"
-        "ru"        "Следующий кейс можно открыть через {GREEN}{1}{DEFAULT}д. {GREEN}{2}{DEFAULT}ч. {GREEN}{3}{DEFAULT}м. {GREEN}{4}{DEFAULT}с."
-        "en"        "The next case can be opened via {GREEN}{1}{DEFAULT}d. {GREEN}{2}{DEFAULT}h. {GREEN}{3}{DEFAULT}m. {GREEN}{4}{DEFAULT}s."
+        "ru"        "Кейс будет доступен через {GREEN}{2}{DEFAULT}ч. {GREEN}{3}{DEFAULT}м. {GREEN}{4}{DEFAULT}с."
+        "en"        "The next case can be opened via {GREEN}{2}{DEFAULT}h. {GREEN}{3}{DEFAULT}m. {GREEN}{4}{DEFAULT}s."
     }
 
 	"be_alive"
