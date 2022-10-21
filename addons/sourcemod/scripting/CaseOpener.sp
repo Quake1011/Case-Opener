@@ -209,11 +209,7 @@ public Plugin myinfo =
 
 public void OnPluginStart() 
 {
-	if(!SQL_CheckConfig("case_opener")) 
-	{
-		SetFailState("[CASEOPENER] Section \"case_opener\" is not found in databases.cfg");
-		return;
-	}
+	if(!SQL_CheckConfig("case_opener")) SetFailState("[CASEOPENER] Section \"case_opener\" is not found in databases.cfg");
 
 	Database.Connect(SQLConnectGlobalDB, "case_opener");
 
@@ -326,10 +322,9 @@ public void OnPluginStart()
 		RegCommandsFromKv("cmds_reset_all", CommandResetFor, "List of players for reset anybody counter");
 	}
 	
-	if(bDropLog)
+	if(bDropLog == true)
 	{
-		FormatTime(sPath, sizeof(sPath), "%d_%b_%Y", GetTime());
-		BuildPath(Path_SM, sLog, sizeof(sLog), "logs/CaseOpener_%s.txt", sPath);
+		BuildPath(Path_SM, sLog, sizeof(sLog), "logs/CaseOpener.log");
 		File hFile = OpenFile(sLog, "a+");
 		CloseHandle(hFile);
 	}
@@ -422,11 +417,7 @@ public void SQLResetCounterCB(Database db, DBResultSet result, const char[] erro
 
 public void SQLConnectGlobalDB(Database db, const char[] error, any data) 
 {
-	if (db == null || error[0]) 
-	{
-		SetFailState("[CASEOPENER] Problem with connection to Database");
-		return;
-	}
+	if (db == null || error[0]) SetFailState("[CASEOPENER] Problem with connection to Database");
 
 	LogMessage("Connection is READY!");
 	gDatabase = db;
@@ -440,7 +431,6 @@ public void SQLTQueryCallBack(Handle owner, Handle hndl, const char[] error, any
 	{
 		SetFailState("[CASEOPENER] Cant create a table \"opener_base\"");
 		LogError(error);
-		return;
 	}
 }
 
@@ -517,11 +507,7 @@ public void SQLAddClientData(Database db, DBResultSet result, const char[] error
 			else LogMessage("[CASEOPENER] The player %N is already in the database", client);
 		}
 	}
-	else 
-	{
-		SetFailState("[CASEOPENER] Error adding player %N data", client);
-		return;
-	}
+	else  SetFailState("[CASEOPENER] Error adding player %N data", client);
 }
 
 public void EventRoundStart(Event hEvent, const char[] sEvent, bool bdb) 
@@ -706,9 +692,8 @@ public void SQLCheckTimeStatusCaseClient(Database db, DBResultSet result, const 
 		{
 			if(result.RowCount > 0) 
 			{
-				int time = GetTime();
 				result.FetchRow();
-				if((result.FetchInt(1) + iTimeBeforeNextOpen) <= time) 
+				if((result.FetchInt(1) + iTimeBeforeNextOpen) <= GetTime()) 
 				{
 					char auth[22], sQuery[256];
 					result.FetchString(0, auth, sizeof(auth));
@@ -844,9 +829,8 @@ public void SQLOnRewardSpawn(Database db, DBResultSet result, const char[] error
 			if(result.RowCount > 0) 
 			{
 				char sQuery[256], auth[22];
-				int time = GetTime();
 				GetClientAuthId(client, AuthId_Steam2, auth, sizeof(auth));
-				SQL_FormatQuery(gDatabase, sQuery, sizeof(sQuery), "UPDATE `opener_base` SET `available`='0', `last_open`='%i' WHERE `steam`='%s'", time, auth);
+				SQL_FormatQuery(gDatabase, sQuery, sizeof(sQuery), "UPDATE `opener_base` SET `available`='0', `last_open`='%i' WHERE `steam`='%s'", GetTime(), auth);
 				SQL_FastQuery(gDatabase, sQuery);                
 			}
 		}
@@ -1009,10 +993,9 @@ public void SQLSetUnavailableCase(Database db, DBResultSet result, const char[] 
 		{
 			if(result.RowCount > 0) 
 			{
-				int time = GetTime();
 				char auth[22], sQuery[256];
 				GetClientAuthId(client, AuthId_Steam2, auth, sizeof(auth));
-				SQL_FormatQuery(gDatabase, sQuery, sizeof(sQuery), "UPDATE `opener_base` SET `available`='0', `last_open`='%i' WHERE `steam`='%s'", time, auth);
+				SQL_FormatQuery(gDatabase, sQuery, sizeof(sQuery), "UPDATE `opener_base` SET `available`='0', `last_open`='%i' WHERE `steam`='%s'", GetTime(), auth);
 				SQL_FastQuery(gDatabase, sQuery);                
 			}
 		}                
@@ -1128,7 +1111,6 @@ void SpawningReward(float fPos[3], int client)
 {
 	SetVariantString("open");
 	AcceptEntityInput(iEntCaseData[client][0], "SetAnimation", -1, -1, -1);
-	AcceptEntityInput(iEntCaseData[client][0], "EnableCollision");
 	DispatchKeyValueFloat(iEntCaseData[client][0], "playbackrate", fOpenSpeedAnim);
 	kv.Rewind();
 	bool ex = false;
