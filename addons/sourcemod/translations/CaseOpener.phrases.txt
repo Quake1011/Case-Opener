@@ -43,8 +43,15 @@
 	"got_vip_all"
 	{
 		"#format"	"{1:N},{2:s},{3:i}"
-		"ru"		"Игрок {PURPLE}{1}{DEFAULT} выбил {PURPLE}{2}{DEFAULT} из кейса на {PURPLE}{3}{DEFAULT} часов, введя !case"
-		"en"		"The player {PURPLE}{1}{DEFAULT} is dropped {PURPLE}{2}{DEFAULT} from case for {PURPLE}{3}{DEFAULT} hours by type !case"
+		"ru"		"Игрок {PURPLE}{1}{DEFAULT} выбил {PURPLE}{2}{DEFAULT} из кейса на {PURPLE}{3}{DEFAULT} секунд, введя !case"
+		"en"		"The player {PURPLE}{1}{DEFAULT} is dropped {PURPLE}{2}{DEFAULT} from case for {PURPLE}{3}{DEFAULT} seconds by type !case"
+	}
+	
+	"got_vip_all_forever"
+	{
+		"#format"	"{1:N},{2:s}"
+		"ru"		"Игрок {PURPLE}{1}{DEFAULT} выбил {PURPLE}{2}{DEFAULT} из кейса на {PURPLE}навсегда{DEFAULT}, введя !case"
+		"en"		"The player {PURPLE}{1}{DEFAULT} is dropped {PURPLE}{2}{DEFAULT} from case for {PURPLE}forever{DEFAULT} by type !case"
 	}
 
     "already_has_vip"
@@ -62,14 +69,14 @@
     "nothing"
     {
 		"#format"   "{1:N}"
-        "ru"        "Игроку {PURPLE}{1}{DEFAULT} ничего не выпало из кейса :("
-        "en"        "The player {PURPLE}{1}{DEFAULT} received nothing from case :("
+        "ru"        "Игроку {PURPLE}{1}{DEFAULT} выпала привилегия, но у него уже есть существующая :("
+        "en"        "The player {PURPLE}{1}{DEFAULT} has a privilege, but he already has an existing one :("
     }
 
     "prefix"
     {
-        "ru"        "{LIGNTRED}[CASE]{DEFAULT} "
-        "en"        "{LIGNTRED}[CASE]{DEFAULT} "
+        "ru"        "{LIGHTRED}[CASE]{DEFAULT} "
+        "en"        "{LIGHTRED}[CASE]{DEFAULT} "
     }
 
 	"credits_scroll"

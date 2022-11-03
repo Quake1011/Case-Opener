@@ -76,6 +76,35 @@ static char sDownloadPaths[][] =
 	"models/props/xan13rus/items/coins/gift_coins.vvd"
 };
 
+static char particles[][] = {
+	"firework_crate_shower_01b",
+	"weapon_confetti_balloons",
+	"extinsguish_fire_blastout_01",
+	"explosion_hegrenade_water_fallback",
+	"explosion_child_smoke_bottom",
+	"error",
+	"dust_devil",
+	"chicken_gone_feathers_cheaper",
+	"c4_train_ground_effect",
+	"beacon_smoke",
+	"firework_skyrocket_02b",
+	"gas_cannister_impact",
+	"gas_cannister_idle_billow",
+	"gas_cannister_trail_smoke_copy",
+	"moneybag_trail",
+	"zone_motes",
+	"confetti_C_omni",
+	"dust_embers",
+	"ar_screenglow_leader_red",
+	"dust_devil_smoke",
+	"dust_drift_reverse",
+	"firework_crate_ground_glow_02",
+	"firework_skyrocket_02a",
+	"gas_cannister_impact_smokestreak_parent",
+	"moneycrate_burst_money",
+	"weapon_muzzle_flash_taser_fallback"
+}
+
 static char sRewardMDL[][] = 
 {
 	"models/props/xan13rus/items/coins/gift_coins.mdl",
@@ -116,7 +145,7 @@ static char sRewardMDL[][] =
 
 Database gDatabase;
 KeyValues kv;
-Handle hTimers[MAXPLAYERS+1][5];
+Handle hTimers[MAXPLAYERS+1][6];
 
 float 
 	fOpenSpeed, 
@@ -336,20 +365,24 @@ public Action CommandResetFor(int client, int args)
 {
 	if(bResetCounter)
 	{
-		Menu hMenu = CreateMenu(SelectPlayer);
-		hMenu.SetTitle("Select player");
-		char temp[2][256];
-		for(int i = 1;i <= MaxClients; i++)
+		AdminId AdminID = GetUserAdmin(client);
+		if(AdminID != INVALID_ADMIN_ID)
 		{
-			if(IsClientInGame(i) && !IsFakeClient(i) && !IsClientSourceTV(i))
+			Menu hMenu = CreateMenu(SelectPlayer);
+			hMenu.SetTitle("Select player");
+			char temp[2][256];
+			for(int i = 1;i <= MaxClients; i++)
 			{
-				Format(temp[0], 256, "%i", i);
-				Format(temp[1], 256, "%N(%i)", i, GetClientUserId(i))
-				hMenu.AddItem(temp[0], temp[1]);
-			}               
+				if(IsClientInGame(i) && !IsFakeClient(i) && !IsClientSourceTV(i))
+				{
+					Format(temp[0], 256, "%i", i);
+					Format(temp[1], 256, "%N(%i)", i, GetClientUserId(i))
+					hMenu.AddItem(temp[0], temp[1]);
+				}               
+			}
+			hMenu.ExitButton = true;
+			hMenu.Display(client, 0);			
 		}
-		hMenu.ExitButton = true;
-		hMenu.Display(client, 0);
 	}
 	else 
 	{
@@ -528,14 +561,17 @@ public void OnClientDisconnect(int client)
 
 public Action CommandResetCounter(int client, int args) 
 {
-	
 	if(bResetCounter) 
 	{
-		char sQuery[256], auth[22];
-		GetClientAuthId(client, AuthId_Steam2, auth, sizeof(auth));
-		
-		SQL_FormatQuery(gDatabase, sQuery, sizeof(sQuery), "SELECT * FROM `opener_base` WHERE `steam`='%s'", auth);
-		gDatabase.Query(SQLResetedCounterCB, sQuery, client, DBPrio_High);
+		AdminId AdminID = GetUserAdmin(client);
+		if(AdminID != INVALID_ADMIN_ID)
+		{
+			char sQuery[256], auth[22];
+			GetClientAuthId(client, AuthId_Steam2, auth, sizeof(auth));
+			
+			SQL_FormatQuery(gDatabase, sQuery, sizeof(sQuery), "SELECT * FROM `opener_base` WHERE `steam`='%s'", auth);
+			gDatabase.Query(SQLResetedCounterCB, sQuery, client, DBPrio_High);			
+		}
 	}
 	else 
 	{
@@ -593,7 +629,7 @@ public void SQLCreatingCaseQuery(Database db, DBResultSet result, const char[] e
 		{
 			if(result.RowCount > 0)
 			{
-				if(iEntCaseData[client][0] == -1 && iEntCaseData[client][1] == -1 && iEntCaseData[client][2] == -1 && iEntCaseData[client][3] == -1 && iEntCaseData[client][4]) 
+				if(iEntCaseData[client][0] == -1 && iEntCaseData[client][1] == -1 && iEntCaseData[client][2] == -1 && iEntCaseData[client][3] == -1 && iEntCaseData[client][4] == -1) 
 				{
 					if(bCaseAccess) 
 					{
@@ -816,6 +852,7 @@ public Action SpawnReward(Handle hNewTimer, int client)
 		gDatabase.Query(SQLOnRewardSpawn, sQuery, client, DBPrio_High);                   
 	}
 	SDKHook(iEntCaseData[client][1], SDKHook_StartTouch, Hook_ModelStartTouch);
+	CreateParticle(iEntCaseData[client][0], particles[GetRandomInt(0, sizeof(particles)-1)], 5.0, client);
 	if(hTimers[client][0] != INVALID_HANDLE) hTimers[client][0] = null;
 	return Plugin_Continue;
 }
@@ -927,7 +964,14 @@ public Action Hook_ModelStartTouch(int iEntity, int activator)
 							kv.Rewind();
 							kv.JumpToKey(buffer);
 							VIP_GiveClientVIP(0, activator, kv.GetNum("time"), buffer, true);
-							if(bCaseMessages) if(bPrintAll) CGOPrintToChatAll("%t%t", "prefix", "got_vip_all", activator, buffer, kv.GetNum("time"));
+							if(bCaseMessages) 
+							{
+								if(bPrintAll) 
+								{
+									if(kv.GetNum("time") == 0) CGOPrintToChatAll("%t%t", "prefix", "got_vip_all_forever", activator, buffer);
+									else CGOPrintToChatAll("%t%t", "prefix", "got_vip_all", activator, buffer, kv.GetNum("time"));
+								}
+							}
 							LogMessage("[CASEOPENER] The player %N received a privilege: %s", activator, buffer);
 							if(bDropLog) LogToFileEx(sLog, "[ %s ] The player %N got %s for %i seconds ", sTime, activator, buffer, kv.GetNum("time"));
 						}
@@ -1095,6 +1139,8 @@ void NullClient(int client)
 
 	if(hTimers[client][4] != INVALID_HANDLE) hTimers[client][4] = null;
 
+	if(hTimers[client][5] != INVALID_HANDLE) hTimers[client][5] = null;
+	
 	for(int i = 0;i <= 4; i++) 
 		iEntCaseData[client][i] = -1;
 
@@ -1315,4 +1361,41 @@ void PreCacheFiles()
 	PrecacheSound("ui/panorama/case_drop_01.wav", true);
 	PrecacheSound("buttons/blip1.wav", true);
 	PrecacheSound("ui/panorama/music_equip_01.wav", true);
+}
+
+stock void CreateParticle(int ent, char[] particleType, float time, int client)
+{
+    int particle = CreateEntityByName("info_particle_system");
+    
+    char name[64];
+    float position[3];
+    if(IsValidEdict(particle))
+    {
+        GetEntPropVector(ent, Prop_Send, "m_vecOrigin", position);
+        TeleportEntity(particle, position, NULL_VECTOR, NULL_VECTOR);
+        GetEntPropString(ent, Prop_Data, "m_iName", name, sizeof(name));
+        DispatchKeyValue(particle, "targetname", "tf2particle");
+        DispatchKeyValue(particle, "parentname", name);
+        DispatchKeyValue(particle, "effect_name", particleType);
+        DispatchSpawn(particle);
+        SetVariantString(name);
+        AcceptEntityInput(particle, "SetParent", particle, particle, 0);
+        ActivateEntity(particle);
+        AcceptEntityInput(particle, "start");
+        hTimers[client][5] = CreateTimer(time, DeleteParticle, particle);
+    }
+}
+
+public Action DeleteParticle(Handle timer, any particle)
+{
+    if(IsValidEntity(particle))
+    {
+        char classN[64];
+        GetEdictClassname(particle, classN, sizeof(classN));
+        if (StrEqual(classN, "info_particle_system", false))
+        {
+            RemoveEdict(particle);
+        }
+    }
+	return Plugin_Continue;
 }
