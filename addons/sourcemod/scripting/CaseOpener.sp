@@ -8,112 +8,6 @@
 #tryinclude <lvl_ranks>
 #tryinclude <FirePlayersStats>
 
-static char sCrates[][] =  
-{
-	"models/props/crates/csgo_drop_crate_winteroffensive.mdl",
-	"models/props/crates/csgo_drop_crate_wildfire.mdl",
-	"models/props/crates/csgo_drop_crate_vanguard.mdl",
-	"models/props/crates/csgo_drop_crate_spectrum2.mdl",
-	"models/props/crates/csgo_drop_crate_spectrum.mdl",
-	"models/props/crates/csgo_drop_crate_shadow.mdl",
-	"models/props/crates/csgo_drop_crate_revolver.mdl",
-	"models/props/crates/csgo_drop_crate_phoenix.mdl",
-	"models/props/crates/csgo_drop_crate_hydra.mdl",
-	"models/props/crates/csgo_drop_crate_huntsman.mdl",
-	"models/props/crates/csgo_drop_crate_horizon.mdl",
-	"models/props/crates/csgo_drop_crate_glove.mdl",
-	"models/props/crates/csgo_drop_crate_gamma2.mdl",
-	"models/props/crates/csgo_drop_crate_gamma.mdl",
-	"models/props/crates/csgo_drop_crate_dangerzone.mdl",
-	"models/props/crates/csgo_drop_crate_community_31.mdl",
-	"models/props/crates/csgo_drop_crate_community_30.mdl",
-	"models/props/crates/csgo_drop_crate_community_29.mdl",
-	"models/props/crates/csgo_drop_crate_community_28.mdl",
-	"models/props/crates/csgo_drop_crate_community_27.mdl",
-	"models/props/crates/csgo_drop_crate_community_26.mdl",
-	"models/props/crates/csgo_drop_crate_community_25.mdl",
-	"models/props/crates/csgo_drop_crate_community_24.mdl",
-	"models/props/crates/csgo_drop_crate_community_23.mdl",
-	"models/props/crates/csgo_drop_crate_community_22.mdl",
-	"models/props/crates/csgo_drop_crate_clutch.mdl",
-	"models/props/crates/csgo_drop_crate_chroma3.mdl",
-	"models/props/crates/csgo_drop_crate_chroma2.mdl",
-	"models/props/crates/csgo_drop_crate_chroma.mdl",
-	"models/props/crates/csgo_drop_crate_breakout.mdl",
-	"models/props/crates/csgo_drop_crate_bravo.mdl",
-	"models/props/crates/csgo_drop_crate_bloodhound.mdl",
-	"models/props/crates/csgo_drop_crate_armsdeal3.mdl",
-	"models/props/crates/csgo_drop_crate_armsdeal1.mdl",
-	"models/props/crates/csgo_drop_crate_armsdeal2.mdl"
-};
-
-static char sDownloadPaths[][] =  
-{
-	"models/ktm/prop_crystal/crystal_cluster_small.mdl",
-	"models/props/xan13rus/items/diamond/diamond_icon.mdl",
-	"models/props/xan13rus/items/coins/gift_coins.mdl",
-	"models/ktm/prop_crystal/crystal_cluster_small.phy",
-	"models/props/xan13rus/items/diamond/diamond_icon.phy",
-	"models/props/xan13rus/items/coins/gift_coins.phy",
-	"materials/models/props/xan13rus/items/coins/coins.vmt",
-	"materials/ktm/prop_crystal/crystal_default_small_multi.vmt",
-	"materials/models/props/xan13rus/items/diamond/diamond_01.vmt",
-	"materials/models/props/xan13rus/items/diamond/diamond_02.vmt",
-	"materials/models/props/xan13rus/items/coins/coins.vtf",
-	"materials/models/props/xan13rus/items/coins/coins_exp.vtf",
-	"materials/ktm/prop_crystal/crystal_default_small_multi.vtf",
-	"materials/models/props/xan13rus/items/diamond/diamond_01.vtf",
-	"materials/models/props/xan13rus/items/diamond/diamond_02.vtf",
-	"models/ktm/prop_crystal/crystal_cluster_small.dx90.vtx",
-	"models/props/xan13rus/items/diamond/diamond_icon.dx80.vtx",
-	"models/props/xan13rus/items/diamond/diamond_icon.dx90.vtx",
-	"models/props/xan13rus/items/diamond/diamond_icon.sw.vtx",
-	"models/props/xan13rus/items/coins/gift_coins.dx80.vtx",
-	"models/props/xan13rus/items/coins/gift_coins.dx90.vtx",
-	"models/props/xan13rus/items/coins/gift_coins.sw.vtx",
-	"models/ktm/prop_crystal/crystal_cluster_small.vvd",
-	"models/props/xan13rus/items/diamond/diamond_icon.vvd",
-	"models/props/xan13rus/items/coins/gift_coins.vvd"
-};
-
-static char particles[][] = {
-	"firework_crate_shower_01b",
-	"weapon_confetti_balloons",
-	"extinsguish_fire_blastout_01",
-	"explosion_hegrenade_water_fallback",
-	"explosion_child_smoke_bottom",
-	"error",
-	"dust_devil",
-	"chicken_gone_feathers_cheaper",
-	"c4_train_ground_effect",
-	"beacon_smoke",
-	"firework_skyrocket_02b",
-	"gas_cannister_impact",
-	"gas_cannister_idle_billow",
-	"gas_cannister_trail_smoke_copy",
-	"moneybag_trail",
-	"zone_motes",
-	"confetti_C_omni",
-	"dust_embers",
-	"ar_screenglow_leader_red",
-	"dust_devil_smoke",
-	"dust_drift_reverse",
-	"firework_crate_ground_glow_02",
-	"firework_skyrocket_02a",
-	"gas_cannister_impact_smokestreak_parent",
-	"moneycrate_burst_money",
-	"weapon_muzzle_flash_taser_fallback"
-}
-
-static char sRewardMDL[][] = 
-{
-	"models/props/xan13rus/items/coins/gift_coins.mdl",
-	"models/props/xan13rus/items/diamond/diamond_icon.mdl",
-	"models/ktm/prop_crystal/crystal_cluster_small.mdl"
-};
-
-#define DEBUG 1 //yet not work
-
 #if defined _vip_core_included
 	bool bGiveVIP;
 	ConVar g_hGiveVIP;
@@ -162,7 +56,8 @@ int
 	iReward[MAXPLAYERS+1] = {-1,...}, 
 	iEntCaseData[MAXPLAYERS+1][5], 
 	g_HaloSprite,
-	g_BeamSprite;
+	g_BeamSprite,
+	iClientParticle[MAXPLAYERS+1];
 
 bool 
 	bEnableBoom, 
@@ -204,6 +99,8 @@ ConVar
 	g_hResetCounter,
 	g_hStartCounter;
 
+#include "CaseOpener/files.sp"
+
 static char sLog[PLATFORM_MAX_PATH];
 
 static char sColor[][] = {"FF0000", "00FF00"};
@@ -232,7 +129,7 @@ public Plugin myinfo =
 	name = "Case Opener",
 	author = "Quake1011",
 	description = "Spawning case with reward",
-	version = "1.3.0",
+	version = "1.3.1",
 	url = "https://github.com/Quake1011/"
 }
 
@@ -505,9 +402,15 @@ public void OnConvarChanged(ConVar convar, const char[] oldValue, const char[] n
 
 public void OnMapStart() 
 {
-	for(int i = 0;i < sizeof(sDownloadPaths);i++) 
+	for(int i = 0;i < sizeof(sDownloadPaths); i++) 
 		AddFileToDownloadsTable(sDownloadPaths[i]);	
 
+	for(int i = 0;i < sizeof(downloadparticles); i++) 
+		AddFileToDownloadsTable(downloadparticles[i]);
+
+	for(int i = 0;i < sizeof(materials); i++) 
+		AddFileToDownloadsTable(materials[i]);		
+	
 	PreCacheFiles();
 }
 
@@ -652,7 +555,7 @@ public void SQLCreatingCaseQuery(Database db, DBResultSet result, const char[] e
 							float fClientOrigin[3];
 							TR_GetEndPosition(fEndOfTrace, hTrace);
 							GetClientAbsOrigin(client, fClientOrigin);
-							if(fEndOfTrace[z] != fClientOrigin[z] && bSamePlat) 
+							if(fEndOfTrace[z] - fClientOrigin[z] >= 5.0 || fClientOrigin[z] - fEndOfTrace[z] <= -5.0 && bSamePlat)  
 							{
 								if(bCaseMessages) CGOPrintToChat(client, "%t%t", "prefix", "same_level_case");
 							}
@@ -852,7 +755,7 @@ public Action SpawnReward(Handle hNewTimer, int client)
 		gDatabase.Query(SQLOnRewardSpawn, sQuery, client, DBPrio_High);                   
 	}
 	SDKHook(iEntCaseData[client][1], SDKHook_StartTouch, Hook_ModelStartTouch);
-	CreateParticle(iEntCaseData[client][0], particles[GetRandomInt(0, sizeof(particles)-1)], 5.0, client);
+	CreateParticle(iEntCaseData[client][0], particles[GetRandomInt(0, sizeof(particles)-1)], client);
 	if(hTimers[client][0] != INVALID_HANDLE) hTimers[client][0] = null;
 	return Plugin_Continue;
 }
@@ -907,7 +810,7 @@ public Action Hook_ModelStartTouch(int iEntity, int activator)
 		{
 			char sTime[32];
 			FormatTime(sTime, sizeof(sTime), "%X", GetTime());
-
+			DeleteParticle(iClientParticle[activator]);
 			switch (iReward[activator]) 
 			{
 				case 0: 
@@ -1276,7 +1179,7 @@ void SpawningReward(float fPos[3], int client)
 		DispatchKeyValue(iEntCaseData[client][3], "rendermode", "5");
 		DispatchKeyValue(iEntCaseData[client][3], "rendercolor", view_as<char>(clr));
 		DispatchKeyValue(iEntCaseData[client][3], "renderamt", "255");
-		DispatchKeyValue(iEntCaseData[client][3], "scale", "1");
+		DispatchKeyValueFloat(iEntCaseData[client][3], "scale", 1.0);
 		DispatchKeyValue(iEntCaseData[client][3], "model", "sprites/glow01.spr");
 		DispatchKeyValueVector(iEntCaseData[client][3], "origin", fPos);
 		DispatchSpawn(iEntCaseData[client][3]);
@@ -1345,11 +1248,11 @@ void CreateTableDB()
 
 void PreCacheFiles() 
 {
-	for(int i = 0;i < sizeof(sCrates); i++) 
-		PrecacheModel(sCrates[i]);
+	for(int i = 0; i < sizeof(sCrates); i++) PrecacheModel(sCrates[i]);
 
-	for(int i = 0;i < sizeof(sRewardMDL); i++) 
-		PrecacheModel(sRewardMDL[i]);
+	for(int i = 0; i < sizeof(sRewardMDL); i++) PrecacheModel(sRewardMDL[i]);
+
+	for(int i = 0; i < sizeof(downloadparticles); i++) PrecacheGeneric(downloadparticles[i], true);	
 
 	PrecacheModel("sprites/glow01.spr", true);
 	iExplode = PrecacheModel("materials/sprites/zerogxplode.vmt", true);
@@ -1363,7 +1266,7 @@ void PreCacheFiles()
 	PrecacheSound("ui/panorama/music_equip_01.wav", true);
 }
 
-stock void CreateParticle(int ent, char[] particleType, float time, int client)
+stock void CreateParticle(int ent, char[] particleType, int client)
 {
     int particle = CreateEntityByName("info_particle_system");
     
@@ -1372,6 +1275,7 @@ stock void CreateParticle(int ent, char[] particleType, float time, int client)
     if(IsValidEdict(particle))
     {
         GetEntPropVector(ent, Prop_Send, "m_vecOrigin", position);
+		position[z]+=20.0;
         TeleportEntity(particle, position, NULL_VECTOR, NULL_VECTOR);
         GetEntPropString(ent, Prop_Data, "m_iName", name, sizeof(name));
         DispatchKeyValue(particle, "targetname", "tf2particle");
@@ -1382,20 +1286,17 @@ stock void CreateParticle(int ent, char[] particleType, float time, int client)
         AcceptEntityInput(particle, "SetParent", particle, particle, 0);
         ActivateEntity(particle);
         AcceptEntityInput(particle, "start");
-        hTimers[client][5] = CreateTimer(time, DeleteParticle, particle);
+		iClientParticle[client] = particle;
+        //hTimers[client][5] = CreateTimer(time, DeleteParticle, particle);
     }
 }
 
-public Action DeleteParticle(Handle timer, any particle)
+void DeleteParticle(any particle)
 {
     if(IsValidEntity(particle))
     {
         char classN[64];
         GetEdictClassname(particle, classN, sizeof(classN));
-        if (StrEqual(classN, "info_particle_system", false))
-        {
-            RemoveEdict(particle);
-        }
+        if (StrEqual(classN, "info_particle_system", false)) RemoveEdict(particle);
     }
-	return Plugin_Continue;
 }
